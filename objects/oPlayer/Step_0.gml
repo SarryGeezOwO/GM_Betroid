@@ -136,6 +136,11 @@ with oDummy
 		continue	
 	}
 	
+	if oPlayer.rawDX == 0 && oPlayer.rawDY == 0
+	{
+		continue	
+	}
+	
 	
 	var eX = x - oPlayer.x
 	var eY = (y-sprite_height/2) - (oPlayer.y-(oPlayer.sprite_height/2))
@@ -150,7 +155,23 @@ with oDummy
 	if dist != 0
 	{
 		eX /= dist
-		eY /= dist		
+		eY /= dist
+		
+		var wallCheck = raycast(
+			oPlayer.x, oPlayer.y-(oPlayer.sprite_height/2),
+			unit_vector_to_degree(eX, eY),
+			oPlayer.maxDistance, [id, oWall]
+		)
+		
+		if wallCheck[4]
+		{	
+			// the raycast will both check oDummy and oWall,
+			// check if the ray hits a wall first
+			if wallCheck[3].object_index == oWall
+			{
+				continue
+			}
+		}
 		
 		var normDist = 1 - (dist / oPlayer.maxDistance);
 		var dp = (oPlayer.dX * eX) + (oPlayer.dY * eY)
@@ -175,7 +196,7 @@ with oDummy
 	}	
 }
 if !hit 
-{
+{	
 	// No enemy spotted
 	pointDirX = 0
 	pointDirY = 0
@@ -199,7 +220,7 @@ if isShooting && fireTimer <= 0 && canShoot
 	var tipY = newDY + (dY*10)
 	var instance = instance_create_layer(tipX, tipY, layer, oBullet)
 	
-	var bAngle = -(arctan2(dY, dX) / pi) * 180
+	var bAngle = unit_vector_to_degree(dX, dY)
 	instance.dirX = dX;
 	instance.dirY = dY;
 	instance.spd = bulletSpeed

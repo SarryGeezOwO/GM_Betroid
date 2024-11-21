@@ -2,15 +2,16 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function degree_to_unit_vector(deg) {
     var rad = degtorad(deg); // Convert degrees to radians
-    return [cos(rad), sin(rad)];
+    return [cos(rad), -sin(rad)];
 }
 
 
 
 /// The unit vector provided should be normalized, duh
-function unit_vector_to_degree(_x, _y) {	
-    return (arctan2(_y, _x) / pi) * 180
+function unit_vector_to_degree(_x, _y) {
+    return -(arctan2(_y, _x) / pi) * 180;
 }
+
 
 
 /// @Description 
@@ -39,28 +40,30 @@ function raycast(_x, _y, deg, len, obj, drawWidth = 1, draw = false, drawEmpty =
 		
 		var hitF = position_meeting(end_x, end_y-1, obj)
 		if hitF {
-			hit = instance_place(end_x, end_y, obj)
+			hit = instance_position(end_x, end_y-1, obj)
 		    collision_x = end_x;
 		    collision_y = end_y;
 			break;	
 		}
 	}
 
-	draw_text(300, 20, string(dir[0]) + ":" + string(dir[1]))
 	if hit != noone 
 	{
 		//draw_rectangle(hit.x, hit.y, collision_x, collision_y, true)
 		
-		
 		var hit_dist = point_distance(_x, _y, collision_x, collision_y);
 		if draw {
+			draw_set_color(c_white)
+			draw_text(collision_x, collision_y+10, object_get_name(hit.object_index))
+			
+			draw_set_color(color)
 			draw_line_width(_x, _y, collision_x, collision_y, drawWidth)	
-			draw_circle(collision_x, collision_y, 4, false)
+			draw_circle(collision_x-(dir[0]*5), collision_y-(dir[1]*5), 4, false)
 			draw_set_color(prevCol)
 		}
 		
-		return [collision_x, collision_y, hit_dist, hit]
-		// x, y, dist, id
+		return [collision_x, collision_y, hit_dist, hit.id, true]
+		// x, y, dist, id, hitBool
 	}
 	else 
 	{
@@ -70,6 +73,6 @@ function raycast(_x, _y, deg, len, obj, drawWidth = 1, draw = false, drawEmpty =
 			draw_line_width(_x, _y, _x + len * dir[0], _y + len * dir[1], drawWidth)	
 			draw_set_color(prevCol)	
 		}
-		return [_x + len * dir[0], _y + len * dir[1], -1, noone];
+		return [_x + len * dir[0], _y + len * dir[1], -1, noone, false];
 	}
 }

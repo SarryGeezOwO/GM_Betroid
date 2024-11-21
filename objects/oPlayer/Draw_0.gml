@@ -7,7 +7,7 @@ function DebugMode (flag)
 // Draw aim assist for debugging
 function debugAimAssist() {
 	DebugMode(true)
-	draw_set_alpha(.3)
+	draw_set_alpha(.1)
 	for (var i = -assistDegree; i <= assistDegree; i++)
 	{	
 		var a = i
@@ -15,27 +15,31 @@ function debugAimAssist() {
 	
 		var pX = rawDX * cos(radA) - rawDY * sin(radA)
 		var pY = rawDX * sin(radA) + rawDY * cos(radA)
-		draw_line(x, y-(sprite_height/2), pX*maxDistance+newDX, pY*maxDistance+newDY)
+		draw_line_width(newDX, newDY, pX*maxDistance+newDX, pY*maxDistance+newDY, 10)
 	}
 	
-	draw_set_color(c_white)
+	draw_set_color(c_ltgray)
 	draw_set_alpha(1)	
-	draw_line_width(x, y-(sprite_height/2), rawDX*maxDistance+x, rawDY*maxDistance+(y-(sprite_height/2)), 2)
-	
+	draw_line_width(newDX, newDY, rawDX*maxDistance+newDX, rawDY*maxDistance+newDY, 3)
+
 	if rawDX != 0 || rawDY != 0 {
 		draw_set_color(c_red)
-		draw_line_width(newDX, newDY, pointDirX*maxDistance+newDX, pointDirY*maxDistance+newDY, 2)
+		draw_line_width(newDX, newDY, pointDirX*maxDistance+newDX, pointDirY*maxDistance+newDY, 3)
 		
 		raycast(
 			newDX, newDY, 
 			unit_vector_to_degree(dX, dY),
-			maxDistance, oWall, 2, true, true, c_blue
+			maxDistance, [oDummy, oWall], 3, true, true, c_lime
 		)
-	}
+	}	
+
 	DebugMode(false)
 }
-debugAimAssist()
-
+if !isRecording
+{
+	debugAimAssist()	
+}
+//draw_line_width(newDX, newDY, pointDirX*maxDistance+newDX, pointDirY*maxDistance+newDY, 3)
 
 
 //var centerY = y-(sprite_height/2)
@@ -188,3 +192,44 @@ draw_line_width(x+2, y-5, rightFoot.posX, rightFoot.posY, 4)
 
 
 
+
+
+/*
+with oDummy
+{		
+	var eX = x - oPlayer.x
+	var eY = (y-sprite_height/2) - (oPlayer.y-(oPlayer.sprite_height/2))
+	var dist = sqrt(power(eX,2) + power(eY,2))
+	
+	// Ignore targets above max range
+	if dist >= oPlayer.maxDistance
+	{
+		continue	
+	}
+	
+	if dist != 0
+	{
+		eX /= dist
+		eY /= dist
+		
+		draw_line(oPlayer.x, oPlayer.y-(oPlayer.sprite_height/2), x, y-(sprite_height/2))
+		var wallCheck = raycast(
+			oPlayer.x, oPlayer.y-(oPlayer.sprite_height/2),
+			unit_vector_to_degree(eX, eY),
+			oPlayer.maxDistance, [id, oWall],
+			1, true, true, c_lime
+		)
+		
+		if wallCheck[4] {
+			if wallCheck[3].object_index == oWall
+			{
+				continue
+			}
+		}
+		
+		draw_text(200, 30, 
+			string(eX) + " : " + string(eY)
+		)
+	}	
+}
+*/
