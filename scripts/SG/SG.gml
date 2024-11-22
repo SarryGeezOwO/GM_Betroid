@@ -13,6 +13,40 @@ function unit_vector_to_degree(_x, _y) {
 }
 
 
+/// Returns an array with 2 length, representing a vector x and y value
+/// @param arr = an array with a 2 length representing the x and y value of a vector
+function normalize_vector_arr(arr)
+{
+	var newX = arr[0]
+	var newY = arr[1]
+	
+	var mag = sqrt(power(newX,2) + power(newY,2))
+
+	if mag != 0
+	{
+		newX /= mag
+		newY /= mag
+	}
+	
+	return [newX, newY]
+}
+
+function normalize_vector(_x, _y)
+{
+	var newX = _x
+	var newY = _y
+	
+	var mag = sqrt(power(newX,2) + power(newY,2))
+
+	if mag != 0
+	{
+		newX /= mag
+		newY /= mag
+	}
+	
+	return [newX, newY]
+}
+
 
 /// @Description 
 ///  Performs a raycast from a specified starting point in a given direction for a set length, 
@@ -53,10 +87,7 @@ function raycast(_x, _y, deg, len, obj, drawWidth = 1, draw = false, drawEmpty =
 		
 		var hit_dist = point_distance(_x, _y, collision_x, collision_y);
 		if draw {
-			draw_set_color(c_white)
 			draw_text(collision_x, collision_y+10, object_get_name(hit.object_index))
-			
-			draw_set_color(color)
 			draw_line_width(_x, _y, collision_x, collision_y, drawWidth)	
 			draw_circle(collision_x-(dir[0]*5), collision_y-(dir[1]*5), 4, false)
 			draw_set_color(prevCol)

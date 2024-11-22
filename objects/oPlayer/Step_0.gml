@@ -1,7 +1,7 @@
 var lKey = keyboard_check( ord("A") )
 var rkey = keyboard_check( ord("D") )
-var spaceKey = keyboard_check( vk_space ) 
-var spaceKeyH = keyboard_check( vk_space )
+var spaceKey = keyboard_check_pressed( vk_space )	// pressed
+var spaceKeyH = keyboard_check( vk_space )			// hold
 var relSpaceKey = keyboard_check_released(vk_space)
 
 var recordKey = keyboard_check_pressed( ord("E") )
@@ -15,14 +15,34 @@ t += 0.05;
 if (t > 1) t = 0;
 
 // decrease timers
-cayoteTimer -= delta_time / 1000;
-bufferTimer -= delta_time / 1000;
-jumpTimer -= delta_time / 1000;
-fireTimer -= delta_time / 1000;
+var dTime = delta_time / 1000;
+cayoteTimer -= dTime;
+bufferTimer -= dTime;
+jumpTimer -= dTime;
+fireTimer -= dTime;
+wallJumpTimer -= dTime;
+
 
 // Move inputs
 xInput = rkey - lKey;
-xSpeed = xInput * moveSpeed;
+if canMove 
+{
+	// Old
+	//xSpeed = xInput * moveSpeed; // For more precise gameplay
+	//xSpeed = lerp(xSpeed, xInput * moveSpeed, .1); // For more smoothness
+
+	var targetSpeed = xInput * moveSpeed;
+	if xSpeed < targetSpeed 
+	{
+		xSpeed += accelerationX;
+		if (xSpeed > targetSpeed) xSpeed = targetSpeed
+	}
+	else if xSpeed > targetSpeed
+	{
+		xSpeed -= deccelerationX;
+		if (xSpeed < targetSpeed) xSpeed = targetSpeed
+	}
+}
 
 // Adjust face direction
 if xInput > 0 && !isFacingRight {
@@ -43,14 +63,13 @@ if place_meeting(x + xSpeed, y, oWall)
 	}
 	xSpeed = 0;
 }
-x += xSpeed;
 
 
 // Vertical movement
-ySpeed += grav;	
+ySpeed += (grav + additionalGrav);	
 
 // Jump buffering
-if spaceKey
+if spaceKey && canJump
 {
 	bufferTimer = bufferTime	
 }
@@ -67,12 +86,13 @@ if isGrounded
 	cayoteTimer = cayoteTime
 	isJumping = false
 	jumpTimer = jumpTime
+	isFalling = false
 }
 
 // Jump
 if (cayoteTimer > 0) && (bufferTimer > 0)
 {
-	ySpeed = -jumpForce-2
+	ySpeed += -jumpForceTap
 	isJumping = true;
 	cayoteTimer = 0
 	bufferTimer = 0	 
@@ -80,7 +100,7 @@ if (cayoteTimer > 0) && (bufferTimer > 0)
 
 if isJumping && jumpTimer > 0 && spaceKeyH
 {
-	ySpeed = -jumpForce
+	ySpeed += -jumpForce
 }
 
 if place_meeting(x, y + ySpeed, oWall) 
@@ -92,10 +112,66 @@ if place_meeting(x, y + ySpeed, oWall)
 	}
 	ySpeed = 0;
 }
-y += ySpeed
 
 
 
+// Wall jumping
+// You can only jump when wallJumpDir.x does not have a magnitude of 0
+var centerY = y-sprite_height/2;
+var xOffset = sprite_width/2;
+leftWallCheck = (
+	position_meeting((x-xOffset)-3, centerY-6, oWall)	|| 
+	position_meeting((x-xOffset)-3, centerY,   oWall)	||
+	position_meeting((x-xOffset)-3, centerY+6, oWall)
+)
+rightWallCheck = (
+	position_meeting((x+xOffset)+3, centerY-6, oWall) ||
+	position_meeting((x+xOffset)+3, centerY,   oWall) ||
+	position_meeting((x+xOffset)+3, centerY+6, oWall)
+)
+
+wallJumpDir[0] = leftWallCheck - rightWallCheck // in this case it's inverted
+wallJumpDir[1] = -1 // modify this if you want to idk
+wallJumpDir = normalize_vector_arr(wallJumpDir)
+
+if wallJumpDir[0] != 0 && !isGrounded
+{	
+	// Fuck gravity, (Turns upside down)
+	if isFalling { 
+		ySpeed /= counterUpForce
+		isWallClimb = true
+	}
+	
+	if spaceKey && wallJumpTimer <= 0
+	{
+		// woowwiess perform a jump
+		xSpeed += wallJumpDir[0] * wallJumpForce/2;
+		ySpeed = wallJumpDir[1] * wallJumpForce;
+		wallJumpTimer = wallJumpCooldown
+	}	
+}
+
+if isGrounded || wallJumpDir[0] == 0 {
+	isWallClimb = false
+}
+canMove = wallJumpTimer <= 0
+
+
+// Extra info 
+if ySpeed > 0 {
+	isFalling = true	
+}
+else if ySpeed <= 0 {
+	isFalling = false	
+}
+
+
+// Add forces to player
+x += xSpeed;
+y += ySpeed;
+
+
+// ------------- Other mechanics
 
 // Aiming
 // record key press
@@ -119,7 +195,7 @@ if mag != 0
 	rawDY /= mag
 }
 else {
-	// Meaning there is no input
+	// Meaning there is no input (aka length 0)
 	fireTimer = shootDelay
 }
 
@@ -230,9 +306,14 @@ if isShooting && fireTimer <= 0 && canShoot
 
 
 
-
-
-// Procedural Feets
+// Procedural Feets 
+var moveFeet = function (_lx, _ly, _rx, _ry) 
+{
+	leftFoot.posX = _lx;
+	leftFoot.posY = _ly;
+	rightFoot.posX = _rx;
+	rightFoot.posY = _ry;
+}
 var newLeftPosX = x+ ((isFacingRight) ? -2 : 2)
 var newRightPosX = x+ ((isFacingRight) ? 8 : -8)
 if current_time - footTime > 250 
@@ -283,15 +364,21 @@ else // right
 leftFoot.posY = y - leftFoot.weight
 rightFoot.posY = y - rightFoot.weight
 
+// Foot position on air
 if !isGrounded
 {
-	leftFoot.posX = x-2
-	rightFoot.posX = x+2
-	leftFoot.posY = y + leftFoot.weight - 2
-	rightFoot.posY = y + rightFoot.weight -2
+	moveFeet(x-2, y+leftFoot.weight-2, x+2, y+rightFoot.weight-2)
 }
 
-
+// Foot position on wall
+if isWallClimb
+{
+	var xOfst = -wallJumpDir[0] * ((sprite_width/2) + 2)
+	moveFeet(
+		x+xOfst, centerY+2,
+		x+xOfst, centerY+10
+	)
+}
 
 
 // Procedural Tail
@@ -336,3 +423,4 @@ for (var i = bodyCount-2; i >= 0; i--)
 	b.posX = lerp(b.posX, prev.posX, lerp_factor);
 	b.posY = lerp(b.posY, prev.posY, lerp_factor);
 }
+

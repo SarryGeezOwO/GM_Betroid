@@ -1,23 +1,51 @@
 // Movement
+canMove = true
 xInput = 0;
-moveSpeed = 4;
+moveSpeed = 4.15;
+// Don't ask about this acceleration system
+accelerationX = .7;	// speed turn (Left)
+deccelerationX = .7;	// speed turn (Right)
 xSpeed = 0;
 ySpeed = 0;
 grav = .4;
+additionalGrav = 0
 isFacingRight = true;
 
 // TODO: Make tail more beautiful
 
 // Jumping
-jumpForce = 5.75
+canJump = true
+jumpForceTap = 4
+jumpForce = .585
 cayoteTime = 120
 bufferTime = 140
 cayoteTimer = 0
 bufferTimer = 0
 isJumping = false
 isGrounded = false
+isFalling = false
 jumpTimer = 0
 jumpTime = 200
+
+
+
+// Wall Jumping
+// Wall jumps are not the same as normal jumping,
+// it has a constant force rather than an incremental force
+canWallJump = false
+isWallClimb = false
+wallJumpCooldown = 50; // milliseconds
+wallJumpTimer = -1;
+counterUpForce = 1.5; // the amount to divide in ySpeed, lower faster fall
+wallJumpForce = 9
+leftWallCheck = false
+rightWallCheck = false
+wallJumpDir = [0, 0] // x, y
+// direction is based on the two wall checks
+// inverted direction of where the wall checked
+// leftWall = 1
+// rightWall = -1
+
 
 // Aiming And Hand
 rawDX = 0
@@ -46,9 +74,9 @@ lastDir = -1
 
 // shooting / Recording
 // Continously shoot whenever the direction is not 'none'
+canShoot = false
 isRecording = false
 isShooting = false
-canShoot = false
 shootDelay = 250
 fireRate = 500 // milliseconds, duh
 fireTimer = 0
@@ -131,3 +159,8 @@ t = 0
 turn = 0
 leftFoot = new Body(3, 10)
 rightFoot = new Body(3, 10)
+
+
+
+// Debugging
+movePoints = []

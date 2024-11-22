@@ -35,6 +35,28 @@ function debugAimAssist() {
 
 	DebugMode(false)
 }
+
+
+function debugPlayerMove(ofst)
+{
+	len = array_length(movePoints);
+	array_push(movePoints, new Vector(x, (y-(sprite_height/2))+ofst))
+	draw_set_color(c_ltgray)
+	
+	for (var i = 1; i < len; i++)
+	{
+		vec = movePoints[i]
+		vecPrev = movePoints[i-1]
+		draw_line(vecPrev.pX, vecPrev.pY, vec.pX, vec.pY)
+	}
+	
+	if len >= 100
+	{
+		array_delete(movePoints, 0, 1)
+	}
+}
+
+
 if !isRecording
 {
 	debugAimAssist()	
@@ -55,7 +77,7 @@ if xInput == 0 || isJumping
 	offset = 0
 }
 else {
-	offset -= 4
+	offset -= arcHeight/2
 }
 spriteYOffset = lerp(spriteYOffset, -offset, .2)
 var xScale = (isFacingRight ? 1 : -1)
@@ -176,6 +198,7 @@ for (var i = 0; i < bodyCount; i++)
 
 
 // Draw the actual player
+debugPlayerMove(spriteYOffset)
 draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, 0, c_white, image_alpha) 
 
 

@@ -36,11 +36,13 @@
   "resources":[
     {"id":{"name":"oBullet","path":"objects/oBullet/oBullet.yy",},},
     {"id":{"name":"oDummy","path":"objects/oDummy/oDummy.yy",},},
+    {"id":{"name":"oGamehandler","path":"objects/oGamehandler/oGamehandler.yy",},},
     {"id":{"name":"oGrass","path":"objects/oGrass/oGrass.yy",},},
     {"id":{"name":"oNoteGraphics","path":"objects/oNoteGraphics/oNoteGraphics.yy",},},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},},
     {"id":{"name":"oWall","path":"objects/oWall/oWall.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"GameState","path":"scripts/GameState/GameState.yy",},},
     {"id":{"name":"SG","path":"scripts/SG/SG.yy",},},
     {"id":{"name":"Note_shader","path":"shaders/Note_shader/Note_shader.yy",},},
     {"id":{"name":"sBullet","path":"sprites/sBullet/sBullet.yy",},},
