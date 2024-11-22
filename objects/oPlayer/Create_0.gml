@@ -1,7 +1,7 @@
 // Movement
 canMove = true
 xInput = 0;
-moveSpeed = 4.15;
+moveSpeed = 3.25; // about 4th tile reach when jumping
 // Don't ask about this acceleration system
 accelerationX = .7;	// speed turn (Left)
 deccelerationX = .7;	// speed turn (Right)
@@ -9,14 +9,15 @@ xSpeed = 0;
 ySpeed = 0;
 grav = .4;
 additionalGrav = 0
+additionalMoveSpeed = 0
 isFacingRight = true;
 
 // TODO: Make tail more beautiful
 
 // Jumping
 canJump = true
-jumpForceTap = 4
-jumpForce = .585
+jumpForceTap = 3.6
+jumpForce = .575
 cayoteTime = 120
 bufferTime = 140
 cayoteTimer = 0
@@ -36,7 +37,7 @@ canWallJump = false
 isWallClimb = false
 wallJumpCooldown = 50; // milliseconds
 wallJumpTimer = -1;
-counterUpForce = 1.5; // the amount to divide in ySpeed, lower faster fall
+counterUpForce = 1.85; // the amount to divide in ySpeed, lower faster fall
 wallJumpForce = 9
 leftWallCheck = false
 rightWallCheck = false
@@ -45,6 +46,17 @@ wallJumpDir = [0, 0] // x, y
 // inverted direction of where the wall checked
 // leftWall = 1
 // rightWall = -1
+
+
+
+// Gliding
+canGlide = true;
+isGliding = false;
+
+
+// Misc.
+fallDamageHeightThreshold = 15
+playFallSound = false
 
 
 // Aiming And Hand
@@ -99,7 +111,7 @@ part_type_life(part_trail, 0, 30);         // Lifespan in frames
 
 // Procedural animation
 spriteYOffset = 0
-bodyGrav = .6
+bodyGrav = 1.5
 
 Body = function(w, d) constructor {
 	weight = w;
@@ -113,14 +125,15 @@ Vector = function(_x, _y) constructor {
 	pY = _y;
 }
 
-bodyCount = 6;
+bodyCount = 7;
 bodies = [
-	new Body(2, 2),
-	new Body(3, 3),
-	new Body(4, 5),
-	new Body(5, 5),
-	new Body(6, 5),
-	new Body(7, 2),
+	new Body(3, 2), // End of tail
+	new Body(4, 1),
+	new Body(3, 2),
+	new Body(4, 4),
+	new Body(5, 4),
+	new Body(6, 4),
+	new Body(7, 2), // attached to player
 ]
 
 GetLen = function(x1, x2, y1, y2) 

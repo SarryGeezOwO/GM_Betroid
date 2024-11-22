@@ -7,11 +7,22 @@ playerInput = -1
 // 3 = down
 // 4 = left
 
+
 var Vec2 = function(_xx, _yy) constructor
 {
 	_x = _xx;
 	_y = _yy;
 }
+
+
+// Notes sprite index
+noteSprites = [
+	sNote,
+	sNote_1,
+	sNote_2,
+	sNote_3
+]
+
 
 // Notes:
 // C, C#, D, D#, E, F, F#, G, G#, A, A#, B

@@ -31,7 +31,7 @@ if canMove
 	//xSpeed = xInput * moveSpeed; // For more precise gameplay
 	//xSpeed = lerp(xSpeed, xInput * moveSpeed, .1); // For more smoothness
 
-	var targetSpeed = xInput * moveSpeed;
+	var targetSpeed = xInput * (moveSpeed + additionalMoveSpeed);
 	if xSpeed < targetSpeed 
 	{
 		xSpeed += accelerationX;
@@ -53,7 +53,7 @@ else if xInput < 0 && isFacingRight {
 }
 
 // Collision checking (Horizontal)
-var _subPixel = .5;
+var _subPixel = .25;
 if place_meeting(x + xSpeed, y, oWall) 
 {
 	var _pixelCheck = _subPixel * sign(xSpeed)
@@ -83,6 +83,7 @@ if relSpaceKey || jumpTimer <= 0
 isGrounded = place_meeting(x, y+1, oWall)
 if isGrounded
 {
+	additionalMoveSpeed = 0
 	cayoteTimer = cayoteTime
 	isJumping = false
 	jumpTimer = jumpTime
@@ -92,10 +93,11 @@ if isGrounded
 // Jump
 if (cayoteTimer > 0) && (bufferTimer > 0)
 {
-	ySpeed += -jumpForceTap
+	ySpeed = -jumpForceTap
 	isJumping = true;
 	cayoteTimer = 0
 	bufferTimer = 0	 
+	additionalMoveSpeed = -1
 }
 
 if isJumping && jumpTimer > 0 && spaceKeyH
@@ -144,6 +146,9 @@ if wallJumpDir[0] != 0 && !isGrounded
 	
 	if spaceKey && wallJumpTimer <= 0
 	{
+		// Remove slowness from the Jump
+		additionalMoveSpeed = 0
+		
 		// woowwiess perform a jump
 		xSpeed += wallJumpDir[0] * wallJumpForce/2;
 		ySpeed = wallJumpDir[1] * wallJumpForce;
@@ -171,7 +176,12 @@ x += xSpeed;
 y += ySpeed;
 
 
-// ------------- Other mechanics
+
+
+
+
+
+// ------------- Other mechanics --------------------
 
 // Aiming
 // record key press
@@ -304,123 +314,4 @@ if isShooting && fireTimer <= 0 && canShoot
 	fireTimer = fireRate
 }
 
-
-
-// Procedural Feets 
-var moveFeet = function (_lx, _ly, _rx, _ry) 
-{
-	leftFoot.posX = _lx;
-	leftFoot.posY = _ly;
-	rightFoot.posX = _rx;
-	rightFoot.posY = _ry;
-}
-var newLeftPosX = x+ ((isFacingRight) ? -2 : 2)
-var newRightPosX = x+ ((isFacingRight) ? 8 : -8)
-if current_time - footTime > 250 
-{
-	// reset	
-	leftLerpX = newLeftPosX
-	rightLerpX = x+ ((isFacingRight) ? 5 : -5)
-	footTime = current_time
-}
-
-if GetLen(x,leftLerpX,y,leftFoot.posY) > leftFoot.distance
-{
-	leftLerpX = newLeftPosX;
-	footTime = current_time
-}
-
-if GetLen(x,rightLerpX,y,rightFoot.posY) > rightFoot.distance
-{
-	rightLerpX = newRightPosX;
-	footTime = current_time
-}
-
-var lX = leftFoot.posX
-var lY = leftFoot.posY
-var rX = rightFoot.posX
-var rY = rightFoot.posY
-
-if GetLen(lX,leftLerpX,lY,lY) <= 1
-{
-	turn = 0
-}
-else if GetLen(rX,rightLerpX,rY,rY) <= 1
-{
-	turn = 1	
-}
-
-// Constantly move feet to lerp
-if turn == 1 // left
-{
-	//leftFoot.posX = lerp(leftFoot.posX, leftLerpX, .85)
-	leftFoot.posX = leftLerpX
-}
-else // right
-{
-	//rightFoot.posX = lerp(rightFoot.posX, rightLerpX, .85)	
-	rightFoot.posX = rightLerpX
-}
-leftFoot.posY = y - leftFoot.weight
-rightFoot.posY = y - rightFoot.weight
-
-// Foot position on air
-if !isGrounded
-{
-	moveFeet(x-2, y+leftFoot.weight-2, x+2, y+rightFoot.weight-2)
-}
-
-// Foot position on wall
-if isWallClimb
-{
-	var xOfst = -wallJumpDir[0] * ((sprite_width/2) + 2)
-	moveFeet(
-		x+xOfst, centerY+2,
-		x+xOfst, centerY+10
-	)
-}
-
-
-// Procedural Tail
-var bTop = bodies[bodyCount-1]
-var len = GetLen(bTop.posX, x, bTop.posY, y)
-var lerp_factor = clamp((len - bTop.distance) / bTop.distance, 0, 1) * 0.5;
-var offsetY = 10
-var offsetX = (isFacingRight) ? -2 : 2
-offsetX = (isJumping) ? 0 : offsetX 
-if len > bTop.distance
-{
-	bTop.posX = lerp(bTop.posX, x+offsetX, lerp_factor);
-	bTop.posY = lerp(bTop.posY, y-offsetY, lerp_factor);
-}
-else if len <= bTop.distance
-{
-	//Apply gravity when not moving
-	if !place_meeting(bTop.posX, bTop.posY+grav, oWall) && !isJumping
-	{
-		bTop.posY += bodyGrav;	
-	}
-}
-
-for (var i = bodyCount-2; i >= 0; i--) 
-{
-	var b = bodies[i]
-	var prev = bodies[i+1]
-	len = GetLen(b.posX, prev.posX, b.posY, prev.posY);
-	if len <= b.distance + 0.5
-	{
-		if !place_meeting(b.posX, b.posY+b.weight+grav, oWall) && !isJumping
-		{
-			b.posY += bodyGrav	
-		}
-	}
-	if len <= b.distance
-	{
-		continue
-	}
-
-	lerp_factor = clamp((len - b.distance) / b.distance, 0, 1) * 0.5; 
-	b.posX = lerp(b.posX, prev.posX, lerp_factor);
-	b.posY = lerp(b.posY, prev.posY, lerp_factor);
-}
 

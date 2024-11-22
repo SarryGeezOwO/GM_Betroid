@@ -11,7 +11,6 @@ if noteIndex >= noteLimit || noteIndex == -1
 
 
 // Draw notes
-var spriteIndexOffset = 3
 for (var i = 0; i < noteLimit; i++)
 {
 	var n = notes[i]
@@ -20,5 +19,5 @@ for (var i = 0; i < noteLimit; i++)
 	{
 		continue	
 	}
-	draw_sprite(n._x+spriteIndexOffset, 0, x+n._y, y)
+	draw_sprite(noteSprites[n._x-1], 0, x+n._y, y)
 }

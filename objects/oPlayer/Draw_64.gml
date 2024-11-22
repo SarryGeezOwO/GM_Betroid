@@ -26,10 +26,6 @@ draw_text(20, 10, text)
 draw_text(20, 30, "shooting: " + string(isShooting))
 
 draw_text(160, 10, debugTxt)
-draw_text(160, 30, "Left: " + string(leftWallCheck))
-draw_text(160, 50, "Right: " + string(rightWallCheck))
-draw_text(160, 70, "YSpeed: " + string(ySpeed))
-draw_text(160, 90, "Falling: " + string(isFalling))
 
 
 draw_set_alpha(.2)

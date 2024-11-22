@@ -146,15 +146,15 @@ if isRecording
 			prev = bodies[i-1]
 		}
 	
-		arcHeight = bodies[i].weight / i
-		offset = sin(t * pi) * arcHeight;	
+		arcHeight = 1.5
+		offset = -sin(t*(i*0.5) * pi) * arcHeight;	
 	
 		if xInput == 0 || isJumping
 		{
 			offset = 0
 		}
 		else {
-			offset -= arcHeight/2
+			offset += arcHeight/2
 		}
 	
 	
@@ -179,15 +179,15 @@ for (var i = 0; i < bodyCount; i++)
 		prev = bodies[i-1]
 	}
 	
-	arcHeight = bodies[i].weight / i
-	offset = sin(t * pi) * arcHeight;	
+	arcHeight = 1.5
+	offset = -sin(t*(i*0.5) * pi) * arcHeight;	
 	
 	if xInput == 0 || isJumping
 	{
 		offset = 0
 	}
 	else {
-		offset -= arcHeight/2
+		offset += arcHeight/2
 	}
 	
 	draw_set_color(make_color_rgb(141, 199, 63))
