@@ -48,6 +48,24 @@ function normalize_vector(_x, _y)
 }
 
 
+
+function get_vector(x1, y1, x2, y2)
+{
+	var newX = x2 - x1;
+	var newY = y2 - y1;
+	return [newX, newY]
+}
+
+
+function get_vector_normalized(x1, y1, x2, y2)
+{
+	var newX = x2 - x1;
+	var newY = y2 - y1;
+	return normalize_vector(newX, newY)
+}
+
+
+
 /// @Description 
 ///  Performs a raycast from a specified starting point in a given direction for a set length, 
 ///  checking for collisions with a specified object. The function returns information about the first object

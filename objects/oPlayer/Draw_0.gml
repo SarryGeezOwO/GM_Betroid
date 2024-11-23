@@ -3,7 +3,6 @@ function DebugMode (flag)
 	draw_set_color(flag ? c_red : c_white)
 }
 
-
 // Draw aim assist for debugging
 function debugAimAssist() {
 	DebugMode(true)
@@ -19,8 +18,9 @@ function debugAimAssist() {
 	}
 	
 	draw_set_color(c_ltgray)
-	draw_set_alpha(1)	
+	draw_set_alpha(.3)
 	draw_line_width(newDX, newDY, rawDX*maxDistance+newDX, rawDY*maxDistance+newDY, 3)
+	draw_set_alpha(1)
 
 	if rawDX != 0 || rawDY != 0 {
 		draw_set_color(c_red)
@@ -62,13 +62,16 @@ function debugPlayerMove(ofst)
 
 if !isRecording
 {
-	debugAimAssist()	
+	if debugToggle 
+	{
+		debugAimAssist()	
+	}
 }
 //draw_line_width(newDX, newDY, pointDirX*maxDistance+newDX, pointDirY*maxDistance+newDY, 3)
 
 
-//var centerY = y-(sprite_height/2)
-var centerY = bbox_top + (bbox_bottom - bbox_top) / 2;
+var centerY = y-(sprite_height/2)
+//var centerY = bbox_top + (bbox_bottom - bbox_top) / 2;
 
 
 
@@ -84,6 +87,8 @@ else {
 }
 spriteYOffset = lerp(spriteYOffset, -offset, .2)
 var xScale = (isFacingRight ? 1 : -1)
+
+
 
 if isRecording {
 	
@@ -101,6 +106,73 @@ if isRecording {
 		Grot, make_color_rgb(texR*255, texG*255, texB*255), image_alpha
 	)	
 }
+
+
+
+
+// Procedural
+// Draw all bodies
+	
+// Tail outline	
+var tailFreq = .5;
+arcHeight = 1.5
+if isRecording
+{
+	for (var i = 0; i < bodyCount; i++) 
+	{
+		var xx = bodies[i].posX;
+		var yy = bodies[i].posY;
+	
+		var prev = bodies[0]
+		if i > 0 {
+			prev = bodies[i-1]
+		}
+	
+		offset = sin(t*(i*tailFreq) * pi) * arcHeight;	
+		if xInput == 0 || isJumping
+		{
+			offset = 0
+		}
+		else {
+			offset += arcHeight/2
+		}
+	
+	
+		// Draw outline
+		var timeC = current_time / 60.0;
+		var texR = 1.0 * sin(timeC + 0.0);
+	    var texG = 0.5 * sin(timeC + 0.2);
+	    var texB = 1.0 * sin(timeC + 0.4);
+		draw_set_color(make_color_rgb(texR*255, texG*255, texB*255))
+		draw_circle(xx, (yy-offset), bodies[i].weight+outline_offset_tail, false);
+	}
+}
+
+// Actual tail (superbly bad code, lmao, absolutely destroying the D.R.Y principle loooll
+draw_set_color(greenCol)
+for (var i = 0; i < bodyCount; i++) 
+{
+	var xx = bodies[i].posX;
+	var yy = bodies[i].posY;
+	
+	var prev = bodies[0]
+	if i > 0 {
+		prev = bodies[i-1]
+	}
+	
+	offset = sin(t*(i*tailFreq) * pi) * arcHeight;	
+	if xInput == 0 || isJumping
+	{
+		offset = 0
+	}
+	else {
+		offset += arcHeight/2
+	}
+	draw_circle(xx, yy-offset, bodies[i].weight, false);
+	//draw_line(xx, yy, prev.posX, prev.posY)
+}
+
+
 
 
 // Draw hand
@@ -133,71 +205,6 @@ if dX != 0 || dY != 0
 */
 
 
-// Procedural
-// Draw all bodies
-	
-// Tail outline	
-if isRecording
-{
-	for (var i = 0; i < bodyCount; i++) 
-	{
-		var xx = bodies[i].posX;
-		var yy = bodies[i].posY;
-	
-		var prev = bodies[0]
-		if i > 0 {
-			prev = bodies[i-1]
-		}
-	
-		arcHeight = 1.5
-		offset = sin(t*(i*0.5) * pi) * arcHeight;	
-	
-		if xInput == 0 || isJumping
-		{
-			offset = 0
-		}
-		else {
-			offset += arcHeight/2
-		}
-	
-	
-		// Draw outline
-		var timeC = current_time / 60.0;
-		var texR = 1.0 * sin(timeC + 0.0);
-	    var texG = 0.5 * sin(timeC + 0.2);
-	    var texB = 1.0 * sin(timeC + 0.4);
-		draw_set_color(make_color_rgb(texR*255, texG*255, texB*255))
-		draw_circle(xx, (yy-offset), bodies[i].weight+outline_offset_tail, false);
-	}
-}
-
-// Actual tail (superbly bad code, lmao, absolutely destroying the D.R.Y principle loooll
-for (var i = 0; i < bodyCount; i++) 
-{
-	var xx = bodies[i].posX;
-	var yy = bodies[i].posY;
-	
-	var prev = bodies[0]
-	if i > 0 {
-		prev = bodies[i-1]
-	}
-	
-	arcHeight = 1.5
-	offset = sin(t*(i*0.5) * pi) * arcHeight;	
-	
-	if xInput == 0 || isJumping
-	{
-		offset = 0
-	}
-	else {
-		offset += arcHeight/2
-	}
-	
-	draw_set_color(greenCol)
-	draw_circle(xx, yy-offset, bodies[i].weight, false);
-	//draw_line(xx, yy, prev.posX, prev.posY)
-}
-
 
 
 // Draw the actual player
@@ -207,11 +214,11 @@ draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, Grot, 
 
 
 DebugMode(false)
-
 // Draw foot
 draw_circle(leftFoot.posX, leftFoot.posY, leftFoot.weight, false)
 draw_circle(rightFoot.posX, rightFoot.posY, rightFoot.weight, false)
 
+DebugMode(false)
 // Draw legs
 draw_line_width(x-2, y-5, leftFoot.posX, leftFoot.posY, 4)
 draw_line_width(x+2, y-5, rightFoot.posX, rightFoot.posY, 4)

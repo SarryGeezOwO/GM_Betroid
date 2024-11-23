@@ -57,6 +57,7 @@
     {"id":{"name":"sNote_3","path":"sprites/sNote_3/sNote_3.yy",},},
     {"id":{"name":"sNote","path":"sprites/sNote/sNote.yy",},},
     {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},},
+    {"id":{"name":"sPlayerDown","path":"sprites/sPlayerDown/sPlayerDown.yy",},},
     {"id":{"name":"sWall","path":"sprites/sWall/sWall.yy",},},
   ],
   "resourceType":"GMProject",

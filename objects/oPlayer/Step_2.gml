@@ -10,13 +10,30 @@ var moveFeet = function (_lx, _ly, _rx, _ry)
 	rightFoot.posX = _rx;
 	rightFoot.posY = _ry;
 }
-var newLeftPosX = x+ ((isFacingRight) ? -2 : 2)
-var newRightPosX = x+ ((isFacingRight) ? 8 : -8)
+var lStepOffset = 2;
+var rStepOffset = 9;
+
+var rstepRestOffset = 6;
+
+if isRunning
+{
+	rightFoot.distance = 16
+	rStepOffset += 8
+}
+else 
+{
+	rightFoot.distance = 10
+}
+
+var newLeftPosX = x+ ((isFacingRight) ? -lStepOffset : lStepOffset)
+var newRightPosX = x+ ((isFacingRight) ? rStepOffset : -rStepOffset)
 if current_time - footTime > 250 
 {
 	// reset	
 	leftLerpX = newLeftPosX
-	rightLerpX = x+ ((isFacingRight) ? 5 : -5)
+	rightLerpX = x+ ((isFacingRight) ? rstepRestOffset : -rstepRestOffset)
+	leftFoot.posY = y-3;
+	rightFoot.posY = y-3;
 	footTime = current_time
 }
 
@@ -36,6 +53,7 @@ var lX = leftFoot.posX
 var lY = leftFoot.posY
 var rX = rightFoot.posX
 var rY = rightFoot.posY
+var arc_height = 1;
 
 if GetLen(lX,leftLerpX,lY,lY) <= 1
 {
@@ -51,14 +69,23 @@ if turn == 1 // left
 {
 	//leftFoot.posX = lerp(leftFoot.posX, leftLerpX, .85)
 	leftFoot.posX = leftLerpX
+	
+	if xInput != 0 {
+		leftFoot.posY = lerp(leftFoot.posY, y-2, t) - (sin(t * pi) * arc_height);
+	}
 }
 else // right
 {
 	//rightFoot.posX = lerp(rightFoot.posX, rightLerpX, .85)	
 	rightFoot.posX = rightLerpX
+	
+	if xInput != 0 {
+		rightFoot.posY = lerp(rightFoot.posY, y-2, t) - (sin((t+0.5) * pi) * arc_height);
+	}
 }
-leftFoot.posY = y - leftFoot.weight
-rightFoot.posY = y - rightFoot.weight
+//leftFoot.posY = y - leftFoot.weight
+//rightFoot.posY = y - rightFoot.weight
+
 
 // Foot position on air
 if !isGrounded
@@ -83,17 +110,19 @@ if isWallClimb
 // Procedural Tail -----------------
 var _subPixel = .25
 var bTop = bodies[bodyCount-1]
-var len = GetLen(bTop.posX, x, bTop.posY, y)
-var lerp_factor = clamp((len - bTop.distance) / bTop.distance, 0, 1) * 0.5;
-var offsetY = (isWallClimb ? 5 : 10)
-var offsetX = (isFacingRight) ? -2 : 2
-offsetX = (isJumping || isWallClimb) ? 0 : offsetX 
+var offsetY = (isWallClimb ? 13 : 6)
+offsetY = (isRunning ? 3 : offsetY)
 
-if len > bTop.distance
-{
-	bTop.posX = lerp(bTop.posX, x+offsetX, lerp_factor);
-	bTop.posY = lerp(bTop.posY, y-offsetY, lerp_factor);
-}
+var offsetX = (isFacingRight) ? -4 : 4;
+offsetX = (isJumping || isWallClimb) ? 0 : offsetX
+offsetX = (isRunning) ? ((isFacingRight) ? -10 : 10) : offsetX
+
+var x2 = x+offsetX;
+var y2 = SprCenter+offsetY;
+
+var vec = get_vector_normalized(bTop.posX, bTop.posY, x2, y2)
+bTop.posX = x2 - vec[0] * bTop.distance;
+bTop.posY = y2 - vec[1] * bTop.distance;
 
 for (var i = bodyCount-2; i >= 0; i--) 
 {	
@@ -101,7 +130,7 @@ for (var i = bodyCount-2; i >= 0; i--)
 	var prev = bodies[i+1]
 	
 	// Apply gravity
-	var realGrav = (xInput == 0 || !isGrounded) ? bodyGrav : .5;
+	var realGrav = (xInput == 0 || !isGrounded) ? bodyGrav : .35;
 	if !place_meeting(b.posX, b.posY+b.weight+realGrav, oWall)
 	{
 		b.posY += realGrav	
@@ -115,15 +144,14 @@ for (var i = bodyCount-2; i >= 0; i--)
 		}	
 	}
 	
-	len = GetLen(b.posX, prev.posX, b.posY, prev.posY);
-	if len <= b.distance
-	{
-		continue
+	var len = GetLen(b.posX, prev.posX, b.posY, prev.posY)
+	if len <= b.distance {
+		continue	
 	}
 
-	lerp_factor = clamp((len - b.distance) / b.distance, 0, 1) * 0.5; 
-	b.posX = lerp(b.posX, prev.posX, lerp_factor);
-	b.posY = lerp(b.posY, prev.posY, lerp_factor);
+	vec = get_vector_normalized(b.posX, b.posY, prev.posX, prev.posY)
+	b.posX = prev.posX - vec[0] * b.distance;
+	b.posY = prev.posY - vec[1] * b.distance;
 }
 
 

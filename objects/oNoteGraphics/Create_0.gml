@@ -1,4 +1,4 @@
-yOffset = 20
+yOffset = 15
 prevInput = -1
 playerInput = -1
 // 0 = none

@@ -23,12 +23,12 @@ else if lastDir == 4 { text = "Left" }
 else { text = "None" }
 
 draw_text(20, 10, text)
-draw_text(20, 30, "shooting: " + string(isShooting))
+draw_text(20, 30, "isShooting: " + string(isShooting))
 
 draw_text(160, 10, debugTxt)
 
 
-draw_set_alpha(.2)
+draw_set_alpha(.1)
 draw_set_color(c_white)
 // Grid settings
 var grid_size = 32;  // The size of each grid square (adjust to your needs)

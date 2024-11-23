@@ -5,6 +5,8 @@ var spaceKeyH = keyboard_check( vk_space )			// hold
 var relSpaceKey = keyboard_check_released(vk_space)
 
 var parasolKey = keyboard_check( vk_lshift )
+var runKey = keyboard_check( vk_rshift )
+var runKeyH = keyboard_check_released( vk_rshift )
 var recordKey = keyboard_check_pressed( ord("E") )
 
 var laKey = keyboard_check(vk_left)
@@ -12,7 +14,16 @@ var raKey = keyboard_check(vk_right)
 var uaKey = keyboard_check(vk_up)
 var daKey = keyboard_check(vk_down)
 
-t += 0.05;
+var debugKey = keyboard_check_pressed( ord("T") )
+if debugKey
+{
+	debugToggle = !debugToggle	
+}
+
+
+if xInput != 0 {
+	t += 0.1;	
+}
 if (t > 1) t = 0;
 
 // decrease timers
@@ -22,6 +33,11 @@ bufferTimer -= dTime;
 jumpTimer -= dTime;
 fireTimer -= dTime;
 wallJumpTimer -= dTime;
+
+
+// Checks
+isGrounded = place_meeting(x, y+1, oWall)
+
 
 
 // Move inputs
@@ -34,10 +50,16 @@ if canMove
 
 	var accelL = accelerationLeft;
 	var accelR = accelerationRight;
-	if !oParasol.isClosed 
+	if !isGrounded // Air control
 	{
-		accelL = .25
-		accelR = .25
+		accelL = airTurnSpeed;
+		accelR = airTurnSpeed
+	}
+
+	if !oParasol.isClosed // Parasol
+	{
+		accelL = glideTurnSpeed
+		accelR = glideTurnSpeed
 	}
 
 	var targetSpeed = xInput * (moveSpeed + additionalMoveSpeed);
@@ -61,20 +83,39 @@ else if xInput < 0 && isFacingRight {
 	isFacingRight = !isFacingRight
 }
 
-// Collision checking (Horizontal)
-var _subPixel = .25;
-if place_meeting(x + xSpeed, y, oWall) 
+
+
+
+// Running ---------------
+if isGrounded {
+	isRunning = runKey
+	sprite_index = (runKey ? sPlayerDown : sPlayer)
+}
+
+if runKeyH {
+	sprite_index = sPlayer
+	isRunning = false	
+}
+
+if isRunning
 {
-	var _pixelCheck = _subPixel * sign(xSpeed)
-	while !place_meeting(x+_pixelCheck, y, oWall)
-	{
-		x += _pixelCheck;
-	}
-	xSpeed = 0;
+	additionalMoveSpeed = (isGrounded) ? 1.65 : 3
+	additionalJumpHeight = 3.1
+	canGlide = false
+	canWallJump = false
+}
+else 
+{
+	additionalJumpHeight = 0
+	additionalMoveSpeed = 0	
+	canGlide = true
+	canWallJump = true
 }
 
 
-// Vertical movement
+
+
+// Vertical movement ---- jumping
 ySpeed += (grav + additionalGrav);	
 
 // Jump buffering
@@ -89,40 +130,35 @@ if relSpaceKey || jumpTimer <= 0
 }
 
 // Cayote Time (Ground check)
-isGrounded = place_meeting(x, y+1, oWall)
 if isGrounded
 {
-	additionalMoveSpeed = 0
+	if isFalling
+	{
+		// Landed logic
+		isRunning = false
+	}
+	
 	cayoteTimer = cayoteTime
 	isJumping = false
 	jumpTimer = jumpTime
 	isFalling = false
+	oParasol.isClosed = true
 }
 
 // Jump
 if (cayoteTimer > 0) && (bufferTimer > 0)
 {
-	ySpeed = -jumpForceTap
+	ySpeed = -(jumpForceTap + additionalJumpHeight)
 	isJumping = true;
 	cayoteTimer = 0
-	bufferTimer = 0	 
-	additionalMoveSpeed = -1
+	bufferTimer = 0
 }
 
-if isJumping && jumpTimer > 0 && spaceKeyH
+if isJumping && jumpTimer > 0 && spaceKeyH && !isRunning
 {
 	ySpeed += -jumpForce
 }
 
-if place_meeting(x, y + ySpeed, oWall) 
-{
-	var _pixelCheck = _subPixel * sign(ySpeed);
-	while !place_meeting(x, y+_pixelCheck, oWall)
-	{
-		y+=_pixelCheck;
-	}
-	ySpeed = 0;
-}
 
 
 
@@ -145,7 +181,7 @@ wallJumpDir[0] = leftWallCheck - rightWallCheck // in this case it's inverted
 wallJumpDir[1] = -1 // modify this if you want to idk
 wallJumpDir = normalize_vector_arr(wallJumpDir)
 
-if wallJumpDir[0] != 0 && !isGrounded
+if wallJumpDir[0] != 0 && !isGrounded && canWallJump
 {	
 	// Fuck gravity, (Turns upside down)
 	if isFalling { 
@@ -161,6 +197,7 @@ if wallJumpDir[0] != 0 && !isGrounded
 		// woowwiess perform a jump
 		xSpeed += wallJumpDir[0] * wallJumpForce/2;
 		ySpeed = wallJumpDir[1] * wallJumpForce;
+		isJumping = true
 		wallJumpTimer = wallJumpCooldown
 	}	
 }
@@ -171,12 +208,43 @@ if isGrounded || wallJumpDir[0] == 0 {
 canMove = wallJumpTimer <= 0
 
 
+// Clamp ySpeed to a certain fall speed
+ySpeed = clamp(ySpeed, -100, maxFallSpeed)
+
+
+// Collision checkin -------------------------------
+// Collision checking (Horizontal)
+var _subPixel = .1;
+if place_meeting(x + xSpeed, y, oWall) 
+{
+	var _pixelCheck = _subPixel * sign(xSpeed)
+	while !place_meeting(x+_pixelCheck, y, oWall)
+	{
+		x += _pixelCheck;
+	}
+	xSpeed = 0;
+}
+
+// Vertical collision
+if place_meeting(x, y + ySpeed, oWall) 
+{
+	var _pixelCheck = _subPixel * sign(ySpeed);
+	while !place_meeting(x, y+_pixelCheck, oWall)
+	{
+		y+=_pixelCheck;
+	}
+	ySpeed = 0;
+}
+
+
 // Extra info 
 if ySpeed > 0 {
 	isFalling = true	
+	additionalGrav = .15
 }
 else if ySpeed <= 0 {
 	isFalling = false	
+	additionalGrav = 0
 }
 
 
@@ -347,15 +415,28 @@ if isShooting && fireTimer <= 0 && canShoot
 
 
 // Parasol
-if isFalling 
+debugTxt = "isFalling: " + string(isFalling)
+if canGlide
 {
-	oParasol.isClosed = !parasolKey	
+	if isFalling 
+	{
+		oParasol.isClosed = !parasolKey	
+	}
+	else {
+		oParasol.isClosed = true	
+	}
+
+	if !oParasol.isClosed 
+	{
+		// remove any additional horizontal speed
+		additionalMoveSpeed = 0
+	}	
 }
-else {
+else
+{
 	oParasol.isClosed = true	
 }
-
-
+isGliding = !oParasol.isClosed
 
 
 // Graphics related settings

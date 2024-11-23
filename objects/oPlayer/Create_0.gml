@@ -6,7 +6,7 @@ SprCenter = 0
 // Movement
 canMove = true
 xInput = 0;
-moveSpeed = 3.25; // about 4th tile reach when jumping
+moveSpeed = 3.25;
 // Don't ask about this acceleration system
 accelerationLeft = .65;	// speed turn (Left)
 accelerationRight = .65;	// speed turn (Right)
@@ -16,13 +16,22 @@ grav = .4;
 additionalGrav = 0
 additionalMoveSpeed = 0
 isFacingRight = true;
+maxFallSpeed = 20;
 
-// TODO: Make tail more beautiful
+
+
+// Running
+canRun = true
+isRunning = false
+runSpeed = 5
+
+
 
 // Jumping
 canJump = true
+additionalJumpHeight = 0
 jumpForceTap = 3.6
-jumpForce = .575
+jumpForce = .485
 cayoteTime = 120
 bufferTime = 140
 cayoteTimer = 0
@@ -31,7 +40,8 @@ isJumping = false
 isGrounded = false
 isFalling = false
 jumpTimer = 0
-jumpTime = 200
+jumpTime = 225
+airTurnSpeed = 1;
 
 
 
@@ -42,7 +52,7 @@ canWallJump = false
 isWallClimb = false
 wallJumpCooldown = 50; // milliseconds
 wallJumpTimer = -1;
-counterUpForce = 1.85; // the amount to divide in ySpeed, lower faster fall
+counterUpForce = 2; // the amount to divide in ySpeed, lower faster fall
 wallJumpForce = 9
 leftWallCheck = false
 rightWallCheck = false
@@ -57,6 +67,8 @@ wallJumpDir = [0, 0] // x, y
 // Gliding
 canGlide = true;
 isGliding = false;
+glideTurnSpeed = .25;
+glideFallSpeed = .1
 
 
 // Misc.
@@ -91,7 +103,7 @@ lastDir = -1
 
 // shooting / Recording
 // Continously shoot whenever the direction is not 'none'
-canShoot = false
+canShoot = true
 isRecording = false
 isShooting = false
 shootDelay = 250
@@ -102,21 +114,38 @@ bulletSpeed = 20
 // recording effect
 outline_offset_tail = 2; // additive
 outline_offset = 1.2; // Controls the outline size
-
-part_sys = part_system_create();
+// Recording effect
+trail_part_sys = part_system_create();
 part_trail = part_type_create();
-
-
-part_type_shape(part_trail, pt_shape_flare); // Shape of the particle
+part_type_shape(part_trail, pt_shape_cloud); // Shape of the particle
 part_type_size(part_trail, 0.05, .1, 0, .15);   // Size variation
 part_type_alpha3(part_trail, 1, 0.5, 0);    // Fading effect
 part_type_life(part_trail, 0, 30);         // Lifespan in frames
 
 
+// Wall effect
+wall_part_sys = part_system_create();
+part_wall_trail = part_type_create();
+part_type_shape(part_wall_trail, pt_shape_flare); // Shape of the particle
+part_type_size(part_wall_trail, 0.05, .2, -.035, .2);   // Size variation
+part_type_alpha3(part_wall_trail, 1, 0.5, 0);    // Fading effect
+part_type_life(part_wall_trail, 10, 120);         // Lifespan in frames
+
+
+
+// Run effect
+run_part_sys = part_system_create();
+part_run_trail = part_type_create();
+part_type_shape(part_run_trail, pt_shape_cloud); // Shape of the particle
+part_type_size(part_run_trail, 0.075, .15, -.01, .1);   // Size variation
+part_type_alpha3(part_run_trail, 1, 0.5, 0);    // Fading effect
+part_type_life(part_run_trail, 5, 25);         // Lifespan in frames
+
+
 
 // Procedural animation
 spriteYOffset = 0
-bodyGrav = 1.5
+bodyGrav = 1.25
 
 Body = function(w, d) constructor {
 	weight = w;
@@ -132,13 +161,13 @@ Vector = function(_x, _y) constructor {
 
 bodyCount = 7;
 bodies = [
-	new Body(3, 2), // End of tail
-	new Body(4, 1),
+	new Body(3, 1), // End of tail
+	new Body(4, 2),
 	new Body(3, 2),
 	new Body(4, 4),
 	new Body(5, 4),
 	new Body(6, 4),
-	new Body(7, 2), // attached to player
+	new Body(6, 2), // attached to player
 ]
 
 GetLen = function(x1, x2, y1, y2) 
@@ -182,3 +211,4 @@ rightFoot = new Body(3, 10)
 
 // Debugging
 movePoints = []
+debugToggle = false

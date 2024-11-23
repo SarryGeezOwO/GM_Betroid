@@ -1,5 +1,5 @@
 x = oPlayer.x-(oPlayer.isFacingRight ? -15 : 15);
-y = oPlayer.y-(oPlayer.sprite_height/2) - 20
+y = oPlayer.y-(oPlayer.sprite_height/2) - (len-2)
 
 time += 0.025;
 if (time > 1) time = 1-.25;
@@ -39,7 +39,7 @@ else
 	pLenLerp = pLenOpen	
 	perpEndPoint[0] = lerp(perpEndPoint[0], endPoint[0], .5)
 	perpEndPoint[1] = lerp(perpEndPoint[1], endPoint[1], .5)
-	oPlayer.ySpeed = clamp(oPlayer.ySpeed, -100, .5)
+	oPlayer.ySpeed = clamp(oPlayer.ySpeed, -100, oPlayer.glideFallSpeed)
 	
 	var rot = (oPlayer.isFacingRight ? 23 : -23)
 	oPlayer.Grot = lerp(oPlayer.Grot, rot, .25)
