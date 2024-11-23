@@ -54,6 +54,9 @@ function debugPlayerMove(ofst)
 	{
 		array_delete(movePoints, 0, 1)
 	}
+	
+	// Draw colliders / hitbox
+	draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true)
 }
 
 
@@ -72,7 +75,7 @@ var centerY = bbox_top + (bbox_bottom - bbox_top) / 2;
 // Is moving animation
 var arcHeight = 8;
 var offset = sin(t * pi) * arcHeight;
-if xInput == 0 || isJumping
+if xInput == 0 || isJumping || !oParasol.isClosed
 {
 	offset = 0
 }
@@ -89,19 +92,19 @@ if isRecording {
 	var texG = 0.5 * sin(timeC + 0.2);
 	var texB = 1.0 * sin(timeC + 0.4);
 	
-	// Draw outline for recording
+	// Draw body outline for recording
 	draw_sprite_ext(
 		sprite_index, image_index, 
 		x, (y+spriteYOffset)+outline_offset*2, 
 		xScale*outline_offset,
 		outline_offset, 
-		0, make_color_rgb(texR*255, texG*255, texB*255), image_alpha
+		Grot, make_color_rgb(texR*255, texG*255, texB*255), image_alpha
 	)	
 }
 
 
 // Draw hand
-draw_set_color(make_color_rgb(141, 199, 63))
+draw_set_color(greenCol)
 //var lerpFactor = (isRecording ? .35 : .45)
 var lerpFactor = clamp(
 	(point_distance(x,centerY, rawDX, rawDY) - 15) / 15, 0, 1) * (isRecording ? .3 : .65);
@@ -119,7 +122,7 @@ if dX != 0 || dY != 0
 	var tipY = newDY + (dY*10)
 	draw_line_width(newDX, newDY, tipX, tipY, 3)
 }
-draw_set_color(make_color_rgb(141, 199, 63))
+draw_set_color(greenCol)
 
 /* Advance hand
 var angle = (arctan2(dY, dX) / pi) * 180
@@ -147,7 +150,7 @@ if isRecording
 		}
 	
 		arcHeight = 1.5
-		offset = -sin(t*(i*0.5) * pi) * arcHeight;	
+		offset = sin(t*(i*0.5) * pi) * arcHeight;	
 	
 		if xInput == 0 || isJumping
 		{
@@ -180,7 +183,7 @@ for (var i = 0; i < bodyCount; i++)
 	}
 	
 	arcHeight = 1.5
-	offset = -sin(t*(i*0.5) * pi) * arcHeight;	
+	offset = sin(t*(i*0.5) * pi) * arcHeight;	
 	
 	if xInput == 0 || isJumping
 	{
@@ -190,7 +193,7 @@ for (var i = 0; i < bodyCount; i++)
 		offset += arcHeight/2
 	}
 	
-	draw_set_color(make_color_rgb(141, 199, 63))
+	draw_set_color(greenCol)
 	draw_circle(xx, yy-offset, bodies[i].weight, false);
 	//draw_line(xx, yy, prev.posX, prev.posY)
 }
@@ -198,8 +201,9 @@ for (var i = 0; i < bodyCount; i++)
 
 
 // Draw the actual player
-debugPlayerMove(spriteYOffset)
-draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, 0, c_white, image_alpha) 
+//debugPlayerMove(spriteYOffset)
+draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, Grot, c_white, image_alpha) 
+
 
 
 DebugMode(false)

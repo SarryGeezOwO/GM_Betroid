@@ -1,10 +1,15 @@
+// Graphics settings
+Grot = 0; // graphics rotation in degrees
+greenCol = make_color_rgb(141, 199, 63)
+SprCenter = 0
+
 // Movement
 canMove = true
 xInput = 0;
 moveSpeed = 3.25; // about 4th tile reach when jumping
 // Don't ask about this acceleration system
-accelerationX = .7;	// speed turn (Left)
-deccelerationX = .7;	// speed turn (Right)
+accelerationLeft = .65;	// speed turn (Left)
+accelerationRight = .65;	// speed turn (Right)
 xSpeed = 0;
 ySpeed = 0;
 grav = .4;

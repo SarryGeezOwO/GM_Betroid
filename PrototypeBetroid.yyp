@@ -40,6 +40,7 @@
     {"id":{"name":"oGamehandler","path":"objects/oGamehandler/oGamehandler.yy",},},
     {"id":{"name":"oGrass","path":"objects/oGrass/oGrass.yy",},},
     {"id":{"name":"oNoteGraphics","path":"objects/oNoteGraphics/oNoteGraphics.yy",},},
+    {"id":{"name":"oParasol","path":"objects/oParasol/oParasol.yy",},},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},},
     {"id":{"name":"oWall","path":"objects/oWall/oWall.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},

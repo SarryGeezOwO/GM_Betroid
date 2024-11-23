@@ -4,6 +4,7 @@ var spaceKey = keyboard_check_pressed( vk_space )	// pressed
 var spaceKeyH = keyboard_check( vk_space )			// hold
 var relSpaceKey = keyboard_check_released(vk_space)
 
+var parasolKey = keyboard_check( vk_lshift )
 var recordKey = keyboard_check_pressed( ord("E") )
 
 var laKey = keyboard_check(vk_left)
@@ -31,15 +32,23 @@ if canMove
 	//xSpeed = xInput * moveSpeed; // For more precise gameplay
 	//xSpeed = lerp(xSpeed, xInput * moveSpeed, .1); // For more smoothness
 
+	var accelL = accelerationLeft;
+	var accelR = accelerationRight;
+	if !oParasol.isClosed 
+	{
+		accelL = .25
+		accelR = .25
+	}
+
 	var targetSpeed = xInput * (moveSpeed + additionalMoveSpeed);
 	if xSpeed < targetSpeed 
 	{
-		xSpeed += accelerationX;
+		xSpeed += accelL;
 		if (xSpeed > targetSpeed) xSpeed = targetSpeed
 	}
 	else if xSpeed > targetSpeed
 	{
-		xSpeed -= deccelerationX;
+		xSpeed -= accelR;
 		if (xSpeed < targetSpeed) xSpeed = targetSpeed
 	}
 }
@@ -198,6 +207,27 @@ else { lastDir = 0 }
 
 rawDX = raKey - laKey
 rawDY = daKey - uaKey
+// Apply Graphic Rotation on down look
+var rot = 8
+if rawDX == 1  && rawDY == 1 && isFacingRight // bottom right
+{
+	Grot = lerp(Grot, -rot, .5)
+}
+else if rawDX == 1 && rawDY == -1 && isFacingRight // Top right
+{
+	Grot = lerp(Grot, rot, .5)	
+}
+else if rawDX == -1 && rawDY == 1 && !isFacingRight // bottom left
+{
+	Grot = lerp(Grot, rot, .5)
+}
+else if rawDX == -1 && rawDY == -1 && !isFacingRight // Top left
+{
+	Grot = lerp(Grot, -rot, .5)	
+}
+else { Grot = lerp(Grot, 0, .5) }
+
+// Normalize input
 var mag = sqrt(power(rawDX,2) + power(rawDY,2))
 if mag != 0
 {
@@ -315,3 +345,18 @@ if isShooting && fireTimer <= 0 && canShoot
 }
 
 
+
+// Parasol
+if isFalling 
+{
+	oParasol.isClosed = !parasolKey	
+}
+else {
+	oParasol.isClosed = true	
+}
+
+
+
+
+// Graphics related settings
+SprCenter = y - (sprite_height/2)

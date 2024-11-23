@@ -12,6 +12,3 @@ if isRecording && (rawDX != 0 || rawDY != 0)
 	var tipY = newDY + (dY*15)
 	part_particles_create(part_sys, tipX, tipY, part_trail, 5);	
 }
-
-// TODO:
-// Make aim assist more advance as this is an important feature after all
