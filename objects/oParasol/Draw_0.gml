@@ -39,10 +39,12 @@ if !isClosed
 
 // background
 draw_set_color(make_color_rgb(212, 196, 179))
+var _uv = sprite_get_uvs(sParasolTex, 0)
 
 vertex_format_begin();
 vertex_format_add_position();
-vertex_format_add_color();
+vertex_format_add_color()
+vertex_format_add_texcoord();
 var vFormat = vertex_format_end();
 
 var vbuffer = vertex_create_buffer();
@@ -51,13 +53,18 @@ vertex_begin(vbuffer, vFormat)
 // Add the vertices to the buffer
 vertex_position(vbuffer, p1[0], p1[1]);
 vertex_color(vbuffer, draw_get_color(), draw_get_alpha());
+vertex_texcoord(vbuffer, _uv[2], _uv[3])
+
 vertex_position(vbuffer, p2[0], p2[1]);
 vertex_color(vbuffer, draw_get_color(), draw_get_alpha());
+vertex_texcoord(vbuffer, _uv[0], _uv[3])
+
 vertex_position(vbuffer, mp[0], mp[1]);
 vertex_color(vbuffer, draw_get_color(), draw_get_alpha());
+vertex_texcoord(vbuffer, _uv[0], _uv[1])
 
 vertex_end(vbuffer);
-vertex_submit(vbuffer, pr_trianglelist, -1)
+vertex_submit(vbuffer, pr_trianglelist, sprite_get_texture(sParasolTex, 0))
 
 vertex_delete_buffer(vbuffer)
 vertex_format_delete(vFormat)
@@ -65,7 +72,7 @@ vertex_format_delete(vFormat)
 
 
 // points and line
-draw_set_color(make_color_rgb(176, 141, 87))
+draw_set_color(make_color_rgb(156, 121, 67))
 draw_circle(p1[0], p1[1], 3, false) // Right end
 draw_circle(p2[0], p2[1], 3, false) // Left end
 draw_circle(mp[0], mp[1], 3, false) // Mid point

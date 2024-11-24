@@ -1,5 +1,5 @@
-var lKey = keyboard_check( ord("A") )
-var rkey = keyboard_check( ord("D") )
+var lKey = keyboard_check( ord("A") ) || (gamepad_axis_value(4, gp_axislh) < -0.5)
+var rkey = keyboard_check( ord("D") ) || (gamepad_axis_value(4, gp_axislh) > 0.5)
 var spaceKey = keyboard_check_pressed( vk_space )	// pressed
 var spaceKeyH = keyboard_check( vk_space )			// hold
 var relSpaceKey = keyboard_check_released(vk_space)
@@ -9,10 +9,12 @@ var runKey = keyboard_check( vk_rshift )
 var runKeyH = keyboard_check_released( vk_rshift )
 var recordKey = keyboard_check_pressed( ord("E") )
 
-var laKey = keyboard_check(vk_left)
-var raKey = keyboard_check(vk_right)
-var uaKey = keyboard_check(vk_up)
+var laKey = keyboard_check(vk_left) 
+var raKey = keyboard_check(vk_right) 
+var uaKey = keyboard_check(vk_up) 
 var daKey = keyboard_check(vk_down)
+
+
 
 var debugKey = keyboard_check_pressed( ord("T") )
 if debugKey
@@ -94,13 +96,14 @@ if isGrounded {
 
 if runKeyH {
 	sprite_index = sPlayer
-	isRunning = false	
+	isRunning = false
 }
 
-if isRunning
+
+if isRunning // extra stats when running
 {
 	additionalMoveSpeed = (isGrounded) ? 1.65 : 3
-	additionalJumpHeight = 3.1
+	additionalJumpHeight = 2.5
 	canGlide = false
 	canWallJump = false
 }
@@ -267,44 +270,60 @@ if recordKey
 	isRecording = !isRecording	
 }
 
-if raKey { lastDir = 2 }
-else if laKey { lastDir = 4 }
-else if uaKey { lastDir = 1 }
-else if daKey { lastDir = 3 }
-else { lastDir = 0 }
+if !isRunning
+{
+	if raKey { lastDir = 2 }
+	else if laKey { lastDir = 4 }
+	else if uaKey { lastDir = 1 }
+	else if daKey { lastDir = 3 }
+	else { lastDir = 0 }	
+}
 
-rawDX = raKey - laKey
-rawDY = daKey - uaKey
+if gamepad_is_connected(4)
+{
+	// controller (normalized already)
+	var gpx = gamepad_axis_value(4, gp_axisrh);
+	var gpy = gamepad_axis_value(4, gp_axisrv);
+	
+	rawDX = (gpx >= .5 || gpx <= -.5) ? gpx : 0
+	rawDY = (gpy >= .5 || gpy <= -.5) ? gpy : 0
+}
+else // keyboard
+{
+	rawDX = raKey - laKey
+	rawDY = daKey - uaKey	
+}
+
 // Apply Graphic Rotation on down look
 var rot = 8
-if rawDX == 1  && rawDY == 1 && isFacingRight // bottom right
-{
-	Grot = lerp(Grot, -rot, .5)
+if (abs(rawDX) == 1 && abs(rawDY) == 1) { 
+    // Diagonal movement
+    Grot = lerp(Grot, (rawDX == rawDY ? -1 : 1) * rot, 0.5); 
+} else {
+    Grot = lerp(Grot, 0, 0.5);
 }
-else if rawDX == 1 && rawDY == -1 && isFacingRight // Top right
-{
-	Grot = lerp(Grot, rot, .5)	
-}
-else if rawDX == -1 && rawDY == 1 && !isFacingRight // bottom left
-{
-	Grot = lerp(Grot, rot, .5)
-}
-else if rawDX == -1 && rawDY == -1 && !isFacingRight // Top left
-{
-	Grot = lerp(Grot, -rot, .5)	
-}
-else { Grot = lerp(Grot, 0, .5) }
 
-// Normalize input
-var mag = sqrt(power(rawDX,2) + power(rawDY,2))
-if mag != 0
+
+
+// Normalize input for keyboard
+if !gamepad_is_connected(4)
 {
-	rawDX /= mag
-	rawDY /= mag
+	var mag = sqrt(power(rawDX,2) + power(rawDY,2))
+	if mag != 0
+	{
+		rawDX /= mag
+		rawDY /= mag
+	}	
 }
-else {
-	// Meaning there is no input (aka length 0)
-	fireTimer = shootDelay
+
+// RawInputs are not allowed on run state
+rawDX *= !isRunning
+rawDY *= !isRunning
+
+// No input
+if rawDX == 0 && rawDY == 0
+{
+	fireTimer = shootDelay	
 }
 
 // Aim assist

@@ -76,6 +76,7 @@ fallDamageHeightThreshold = 15
 playFallSound = false
 
 
+
 // Aiming And Hand
 rawDX = 0
 rawDY = 0
@@ -87,7 +88,7 @@ GDX = 0 // GUI
 GDY = 0 // GUI
 
 debugTxt = ""
-assistDegree = 30
+assistDegree = 15
 maxDistance = 800
 bestScore = -1
 pointDirX = 0
@@ -204,7 +205,7 @@ leftLerpX = 0
 rightLerpX = 0
 t = 0
 turn = 0
-leftFoot = new Body(3, 10)
+leftFoot = new Body(3, 15)
 rightFoot = new Body(3, 10)
 
 

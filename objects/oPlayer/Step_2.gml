@@ -17,11 +17,13 @@ var rstepRestOffset = 6;
 
 if isRunning
 {
-	rightFoot.distance = 16
-	rStepOffset += 8
+	rstepRestOffset = 12
+	rightFoot.distance = 19
+	rStepOffset += 9
 }
 else 
 {
+	rstepRestOffset = 6
 	rightFoot.distance = 10
 }
 
@@ -53,13 +55,12 @@ var lX = leftFoot.posX
 var lY = leftFoot.posY
 var rX = rightFoot.posX
 var rY = rightFoot.posY
-var arc_height = 1;
 
-if GetLen(lX,leftLerpX,lY,lY) <= 1
+if GetLen(lX,leftLerpX,lY,lY) <= .25
 {
 	turn = 0
 }
-else if GetLen(rX,rightLerpX,rY,rY) <= 1
+else if GetLen(rX,rightLerpX,rY,rY) <= .25
 {
 	turn = 1	
 }
@@ -67,24 +68,14 @@ else if GetLen(rX,rightLerpX,rY,rY) <= 1
 // Constantly move feet to lerp
 if turn == 1 // left
 {
-	//leftFoot.posX = lerp(leftFoot.posX, leftLerpX, .85)
 	leftFoot.posX = leftLerpX
-	
-	if xInput != 0 {
-		leftFoot.posY = lerp(leftFoot.posY, y-2, t) - (sin(t * pi) * arc_height);
-	}
 }
 else // right
 {
-	//rightFoot.posX = lerp(rightFoot.posX, rightLerpX, .85)	
 	rightFoot.posX = rightLerpX
-	
-	if xInput != 0 {
-		rightFoot.posY = lerp(rightFoot.posY, y-2, t) - (sin((t+0.5) * pi) * arc_height);
-	}
 }
-//leftFoot.posY = y - leftFoot.weight
-//rightFoot.posY = y - rightFoot.weight
+leftFoot.posY = y - leftFoot.weight
+rightFoot.posY = y - rightFoot.weight
 
 
 // Foot position on air
