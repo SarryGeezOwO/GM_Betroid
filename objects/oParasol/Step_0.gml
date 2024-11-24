@@ -24,14 +24,18 @@ endPoint[1] = udir[1]*len+y;
 
 // Transition
 if isClosed
-{
+{	
 	pLenLerp = 5
 	perpEndPoint[0] = lerp(perpEndPoint[0], spHX, .65)
 	perpEndPoint[1] = lerp(perpEndPoint[1], spHY, .65)
 	oPlayer.Grot = lerp(oPlayer.Grot, 0, .65)
 	
 	timer -= delta_time/1000
-}
+	if audio_sound_get_gain(snd_wind) == 0
+	{
+		audio_stop_sound(snd_wind)
+	}
+}	
 else 
 {
 	timer = 300 // milliseconds
@@ -41,8 +45,24 @@ else
 	perpEndPoint[1] = lerp(perpEndPoint[1], endPoint[1], .5)
 	oPlayer.ySpeed = clamp(oPlayer.ySpeed, -100, oPlayer.glideFallSpeed)
 	
-	var rot = (oPlayer.isFacingRight ? 23 : -23)
-	oPlayer.Grot = lerp(oPlayer.Grot, rot, .25)
+	var rot = (oPlayer.isFacingRight ? 15 : -15)
+	oPlayer.Grot = rot
+}
+
+if prevClosed != isClosed 
+{
+	// Logic that triggers one time per transition
+	prevClosed = isClosed
+	audio_play_sound(snd_parasol_open, -2, false, 1, .3, random_range(1.5, 2.5))
+	if isClosed
+	{
+		audio_sound_gain(snd_wind, 0, 500)
+	}	
+	else 
+	{
+		audio_play_sound(snd_wind, -1, true, 1, random_range(0, 4))	
+		audio_sound_gain(snd_wind, 1, 500)
+	}
 }
 
 pLen = lerp(pLen, pLenLerp, .2)	

@@ -1,4 +1,5 @@
 isClosed = true
+prevClosed = true
 stopDrawing = false
 timer = 0
 
@@ -25,7 +26,7 @@ udir = [1, 1]
 part_sys = part_system_create();
 part_trail = part_type_create();
 
-part_system_depth(part_sys, -20)
+part_system_depth(part_sys, 20)
 part_type_shape(part_trail, pt_shape_cloud); 
 part_type_size(part_trail, 0.05, .25, 0, .2);  
 part_type_alpha3(part_trail, .5, 0.25, 0);   

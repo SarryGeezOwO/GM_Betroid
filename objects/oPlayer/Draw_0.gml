@@ -103,7 +103,7 @@ if isRecording {
 		x, (y+spriteYOffset)+outline_offset*2, 
 		xScale*outline_offset,
 		outline_offset, 
-		Grot, make_color_rgb(texR*255, texG*255, texB*255), image_alpha
+		image_angle+Grot, make_color_rgb(texR*255, texG*255, texB*255), image_alpha
 	)	
 }
 
@@ -208,8 +208,8 @@ if dX != 0 || dY != 0
 
 
 // Draw the actual player
-//debugPlayerMove(spriteYOffset)
-draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, Grot, c_white, image_alpha) 
+if debugToggle debugPlayerMove(spriteYOffset)
+draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, image_angle+Grot, c_white, image_alpha) 
 
 
 

@@ -43,9 +43,9 @@ isGrounded = place_meeting(x, y+1, oWall)
 
 
 // Move inputs
-xInput = rkey - lKey;
-if canMove 
-{
+xInput = isLeaping ? xInput : (rkey - lKey);
+if canMove
+{	
 	// Old
 	//xSpeed = xInput * moveSpeed; // For more precise gameplay
 	//xSpeed = lerp(xSpeed, xInput * moveSpeed, .1); // For more smoothness
@@ -141,6 +141,7 @@ if isGrounded
 		isRunning = false
 	}
 	
+	isLeaping = false
 	cayoteTimer = cayoteTime
 	isJumping = false
 	jumpTimer = jumpTime
@@ -151,6 +152,9 @@ if isGrounded
 // Jump
 if (cayoteTimer > 0) && (bufferTimer > 0)
 {
+	if isRunning {
+		isLeaping = true	
+	}
 	ySpeed = -(jumpForceTap + additionalJumpHeight)
 	isJumping = true;
 	cayoteTimer = 0
@@ -190,6 +194,7 @@ if wallJumpDir[0] != 0 && !isGrounded && canWallJump
 	if isFalling { 
 		ySpeed /= counterUpForce
 		isWallClimb = true
+		isLeaping = false
 	}
 	
 	if spaceKey && wallJumpTimer <= 0
@@ -200,8 +205,8 @@ if wallJumpDir[0] != 0 && !isGrounded && canWallJump
 		// woowwiess perform a jump
 		xSpeed += wallJumpDir[0] * wallJumpForce/2;
 		ySpeed = wallJumpDir[1] * wallJumpForce;
-		isJumping = true
 		wallJumpTimer = wallJumpCooldown
+		isJumping = true
 	}	
 }
 
@@ -279,20 +284,8 @@ if !isRunning
 	else { lastDir = 0 }	
 }
 
-if gamepad_is_connected(4)
-{
-	// controller (normalized already)
-	var gpx = gamepad_axis_value(4, gp_axisrh);
-	var gpy = gamepad_axis_value(4, gp_axisrv);
-	
-	rawDX = (gpx >= .5 || gpx <= -.5) ? gpx : 0
-	rawDY = (gpy >= .5 || gpy <= -.5) ? gpy : 0
-}
-else // keyboard
-{
-	rawDX = raKey - laKey
-	rawDY = daKey - uaKey	
-}
+rawDX = raKey - laKey
+rawDY = daKey - uaKey
 
 // Apply Graphic Rotation on down look
 var rot = 8
@@ -304,17 +297,12 @@ if (abs(rawDX) == 1 && abs(rawDY) == 1) {
 }
 
 
-
-// Normalize input for keyboard
-if !gamepad_is_connected(4)
+var mag = sqrt(power(rawDX,2) + power(rawDY,2))
+if mag != 0
 {
-	var mag = sqrt(power(rawDX,2) + power(rawDY,2))
-	if mag != 0
-	{
-		rawDX /= mag
-		rawDY /= mag
-	}	
-}
+	rawDX /= mag
+	rawDY /= mag
+}	
 
 // RawInputs are not allowed on run state
 rawDX *= !isRunning
@@ -437,26 +425,26 @@ if isShooting && fireTimer <= 0 && canShoot
 debugTxt = "isFalling: " + string(isFalling)
 if canGlide
 {
-	if isFalling 
-	{
-		oParasol.isClosed = !parasolKey	
-	}
-	else {
-		oParasol.isClosed = true	
-	}
-
-	if !oParasol.isClosed 
+	oParasol.isClosed = !(parasolKey * isFalling)
+	if !oParasol.isClosed
 	{
 		// remove any additional horizontal speed
 		additionalMoveSpeed = 0
+		isLeaping = false
 	}	
 }
 else
 {
 	oParasol.isClosed = true	
 }
+// Extra checks
+if isWallClimb 
+{
+	oParasol.isClosed = true	
+}
+
 isGliding = !oParasol.isClosed
 
 
 // Graphics related settings
-SprCenter = y - (sprite_height/2)
+SprCenter = y - (sprite_height/2)	

@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_parasol_open",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":2.256,
+  "name":"snd_parasol_open",
+  "parent":{
+    "name":"Sounds",
+    "path":"folders/Sounds.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_parasol_open.mp3",
+  "type":0,
+  "volume":0.75,
+}

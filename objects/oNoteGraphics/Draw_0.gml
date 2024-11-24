@@ -1,5 +1,6 @@
 // Draw pointer
 draw_set_color(c_yellow)
+draw_set_alpha(0)
 
 if noteIndex >= noteLimit || noteIndex == -1
 {
@@ -21,3 +22,4 @@ for (var i = 0; i < noteLimit; i++)
 	}
 	draw_sprite(noteSprites[n._x-1], 0, x+n._y, y)
 }
+draw_set_alpha(1)

@@ -53,15 +53,15 @@ vertex_begin(vbuffer, vFormat)
 // Add the vertices to the buffer
 vertex_position(vbuffer, p1[0], p1[1]);
 vertex_color(vbuffer, draw_get_color(), draw_get_alpha());
-vertex_texcoord(vbuffer, _uv[2], _uv[3])
+vertex_texcoord(vbuffer, _uv[0], _uv[1])
 
 vertex_position(vbuffer, p2[0], p2[1]);
 vertex_color(vbuffer, draw_get_color(), draw_get_alpha());
-vertex_texcoord(vbuffer, _uv[0], _uv[3])
+vertex_texcoord(vbuffer, _uv[2], _uv[3])
 
 vertex_position(vbuffer, mp[0], mp[1]);
 vertex_color(vbuffer, draw_get_color(), draw_get_alpha());
-vertex_texcoord(vbuffer, _uv[0], _uv[1])
+vertex_texcoord(vbuffer, _uv[0], _uv[3])
 
 vertex_end(vbuffer);
 vertex_submit(vbuffer, pr_trianglelist, sprite_get_texture(sParasolTex, 0))
@@ -73,15 +73,15 @@ vertex_format_delete(vFormat)
 
 // points and line
 draw_set_color(make_color_rgb(156, 121, 67))
-draw_circle(p1[0], p1[1], 3, false) // Right end
-draw_circle(p2[0], p2[1], 3, false) // Left end
-draw_circle(mp[0], mp[1], 3, false) // Mid point
+draw_circle(p1[0], p1[1], 2, false) // Right end
+draw_circle(p2[0], p2[1], 2, false) // Left end
+draw_circle(mp[0], mp[1], 2, false) // mid point
 
-draw_line_width(p1[0], p1[1], mp[0], mp[1], 1)
-draw_line_width(p2[0], p2[1], mp[0], mp[1], 1)
-draw_line_width(p1[0], p1[1], p2[0], p2[1], 1)
+draw_line(p1[0], p1[1], mp[0], mp[1])
+draw_line(p2[0], p2[1], mp[0], mp[1])
+draw_line(p1[0], p1[1], p2[0], p2[1])
 
-// Draw inner lines
+// Draw inner moving lines
 for (var i = 0; i < 1; i += .25)
 {
 	var ed = [

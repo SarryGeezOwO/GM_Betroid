@@ -3,6 +3,7 @@ Grot = 0; // graphics rotation in degrees
 greenCol = make_color_rgb(141, 199, 63)
 SprCenter = 0
 
+
 // Movement
 canMove = true
 xInput = 0;
@@ -24,7 +25,7 @@ maxFallSpeed = 20;
 canRun = true
 isRunning = false
 runSpeed = 5
-
+isLeaping = false
 
 
 // Jumping
@@ -42,7 +43,6 @@ isFalling = false
 jumpTimer = 0
 jumpTime = 225
 airTurnSpeed = 1;
-
 
 
 // Wall Jumping
@@ -68,7 +68,7 @@ wallJumpDir = [0, 0] // x, y
 canGlide = true;
 isGliding = false;
 glideTurnSpeed = .25;
-glideFallSpeed = .1
+glideFallSpeed = .1 // .1
 
 
 // Misc.
@@ -88,7 +88,7 @@ GDX = 0 // GUI
 GDY = 0 // GUI
 
 debugTxt = ""
-assistDegree = 15
+assistDegree = 10
 maxDistance = 800
 bestScore = -1
 pointDirX = 0
@@ -104,7 +104,7 @@ lastDir = -1
 
 // shooting / Recording
 // Continously shoot whenever the direction is not 'none'
-canShoot = true
+canShoot = false
 isRecording = false
 isShooting = false
 shootDelay = 250

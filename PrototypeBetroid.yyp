@@ -35,6 +35,7 @@
   },
   "name":"PrototypeBetroid",
   "resources":[
+    {"id":{"name":"Lore and things","path":"notes/Lore and things/Lore and things.yy",},},
     {"id":{"name":"oBullet","path":"objects/oBullet/oBullet.yy",},},
     {"id":{"name":"oDummy","path":"objects/oDummy/oDummy.yy",},},
     {"id":{"name":"oGamehandler","path":"objects/oGamehandler/oGamehandler.yy",},},
@@ -48,6 +49,8 @@
     {"id":{"name":"SG","path":"scripts/SG/SG.yy",},},
     {"id":{"name":"Note_shader","path":"shaders/Note_shader/Note_shader.yy",},},
     {"id":{"name":"snd_metal_pipe","path":"sounds/snd_metal_pipe/snd_metal_pipe.yy",},},
+    {"id":{"name":"snd_parasol_open","path":"sounds/snd_parasol_open/snd_parasol_open.yy",},},
+    {"id":{"name":"snd_wind","path":"sounds/snd_wind/snd_wind.yy",},},
     {"id":{"name":"sBullet","path":"sprites/sBullet/sBullet.yy",},},
     {"id":{"name":"sDummy","path":"sprites/sDummy/sDummy.yy",},},
     {"id":{"name":"sGrass","path":"sprites/sGrass/sGrass.yy",},},

@@ -26,20 +26,3 @@ draw_text(20, 10, text)
 draw_text(20, 30, "isShooting: " + string(isShooting))
 
 draw_text(160, 10, debugTxt)
-
-
-draw_set_alpha(.1)
-draw_set_color(c_white)
-// Grid settings
-var grid_size = 32;  // The size of each grid square (adjust to your needs)
-
-// Draw the horizontal grid lines
-for (var i = 0; i <= room_height; i += grid_size) {
-    draw_line(0, i, room_width, i);  // Draw a line from left to right at this y position
-}
-
-// Draw the vertical grid lines
-for (var j = 0; j <= room_width; j += grid_size) {
-    draw_line(j, 0, j, room_height);  // Draw a line from top to bottom at this x position
-}
-draw_set_alpha(1)
