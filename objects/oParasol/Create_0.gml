@@ -5,10 +5,10 @@ timer = 0
 
 // Head
 perpEndPoint = [0, 0]
-pLenOpen = 30
-pLenLerp = 20
+pLenOpen = 25
+pLenLerp = 15
 pLen = 0
-tlen = 20
+tlen = 15
 
 time = 0
 
@@ -16,7 +16,7 @@ time = 0
 spHX = 0
 spHY = 0
 
-len = 15
+len = 10
 startPoint = [500, 500]
 endPoint = [700, 300]
 udir = [1, 1]

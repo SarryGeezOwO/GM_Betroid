@@ -1,10 +1,10 @@
-x = oPlayer.x-(oPlayer.isFacingRight ? -15 : 15);
+x = oPlayer.x-(oPlayer.isFacingRight ? -13 : 13);
 y = oPlayer.y-(oPlayer.sprite_height/2) - (len-2)
 
 time += 0.025;
 if (time > 1) time = 1-.25;
 
-var fv = (oPlayer.isFacingRight ? .25 : -.25)
+var fv = (oPlayer.isFacingRight ? .20 : -.20)
 var mx = fv;
 var my = -1;
 var l = sqrt(power(mx, 2) + power(my, 2))

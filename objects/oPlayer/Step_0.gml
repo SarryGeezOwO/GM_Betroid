@@ -24,7 +24,7 @@ if debugKey
 
 
 if xInput != 0 {
-	t += 0.1;	
+	t += 0.1;
 }
 if (t > 1) t = 0;
 

@@ -205,8 +205,8 @@ leftLerpX = 0
 rightLerpX = 0
 t = 0
 turn = 0
-leftFoot = new Body(3, 15)
-rightFoot = new Body(3, 10)
+leftFoot = new Body(4, 10)
+rightFoot = new Body(4, 10)
 
 
 

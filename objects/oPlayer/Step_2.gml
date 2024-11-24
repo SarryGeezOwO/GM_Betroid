@@ -12,6 +12,7 @@ var moveFeet = function (_lx, _ly, _rx, _ry)
 }
 var lStepOffset = 2;
 var rStepOffset = 9;
+leftFoot.distance = isFacingRight ? 10 : 6
 
 var rstepRestOffset = 6;
 
@@ -27,15 +28,15 @@ else
 	rightFoot.distance = 10
 }
 
-var newLeftPosX = x+ ((isFacingRight) ? -lStepOffset : lStepOffset)
-var newRightPosX = x+ ((isFacingRight) ? rStepOffset : -rStepOffset)
-if current_time - footTime > 250 
+var newLeftPosX = x+ ((isFacingRight) ? lStepOffset : -lStepOffset)
+var newRightPosX = x+ ((isFacingRight) ? rStepOffset : -(rStepOffset))
+if current_time - footTime > 60 
 {
 	// reset	
-	leftLerpX = newLeftPosX
+	leftLerpX = x+ ((isFacingRight) ? lStepOffset-5 : -lStepOffset+5)
 	rightLerpX = x+ ((isFacingRight) ? rstepRestOffset : -rstepRestOffset)
-	leftFoot.posY = y-3;
-	rightFoot.posY = y-3;
+	leftFoot.posY = y-leftFoot.weight;
+	rightFoot.posY = y-rightFoot.weight;
 	footTime = current_time
 }
 
@@ -62,26 +63,47 @@ if GetLen(lX,leftLerpX,lY,lY) <= .25
 }
 else if GetLen(rX,rightLerpX,rY,rY) <= .25
 {
-	turn = 1	
+	turn = 1
 }
 
 // Constantly move feet to lerp
+var arcHeight = 2;
 if turn == 1 // left
 {
 	leftFoot.posX = leftLerpX
+	
+	if xInput != 0
+	{
+		var arcOffset = sin(t * pi) * arcHeight;
+		leftFoot.posY = lerp(leftFoot.posY, y - (arcOffset + leftFoot.weight), t)	
+	}
+	else { leftFoot.posY = y - leftFoot.weight }
 }
 else // right
 {
 	rightFoot.posX = rightLerpX
+	
+	if xInput != 0
+	{
+		var arcOffset = sin((t+0.5) * pi) * arcHeight;
+		rightFoot.posY = lerp(rightFoot.posY, y - (arcOffset + rightFoot.weight), t)	
+	}
+	else { rightFoot.posY = y - rightFoot.weight }
 }
-leftFoot.posY = y - leftFoot.weight
-rightFoot.posY = y - rightFoot.weight
 
 
 // Foot position on air
 if !isGrounded
 {
-	moveFeet(x-2, y+leftFoot.weight-2, x+2, y+rightFoot.weight-2)
+	var m = isFacingRight ? 1 : -1
+	if isRunning
+	{
+		moveFeet(x-(2*m), y-2, x+(10*m), y-2)	
+	}
+	else 
+	{
+		moveFeet(x-(2*m), y-2, x+3*m, y-2)	
+	}
 }
 
 // Foot position on wall

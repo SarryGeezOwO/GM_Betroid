@@ -66,6 +66,39 @@ function get_vector_normalized(x1, y1, x2, y2)
 
 
 
+function scale_vector_by_length(vector, desiredLength)
+{
+	var mag = sqrt(power(vector[0],2) + power(vector[1],2))
+	if mag != 0
+	{
+		return [
+			vector[0] * (desiredLength / mag),
+			vector[1] * (desiredLength / mag)
+		]
+	}
+	
+	return [0, 0]
+}
+
+
+function add_length_to_vector(vector, additiveLength)
+{
+	// add the scaled to the original vector
+	var vec = scale_vector_by_length(vector, additiveLength) // get the scaled version
+	return [vector[0]+vec[0], vector[1]+vec[1]]
+}
+
+
+
+function scale_position_by_vector(unitVec, length, position)
+{
+	return [
+		unitVec[0]*length+position[0],
+		unitVec[1]*length+position[1]
+	]	
+}
+
+
 /// @Description 
 ///  Performs a raycast from a specified starting point in a given direction for a set length, 
 ///  checking for collisions with a specified object. The function returns information about the first object

@@ -62,6 +62,7 @@
     {"id":{"name":"sParasolTex","path":"sprites/sParasolTex/sParasolTex.yy",},},
     {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},},
     {"id":{"name":"sPlayerDown","path":"sprites/sPlayerDown/sPlayerDown.yy",},},
+    {"id":{"name":"sPlayerFeet","path":"sprites/sPlayerFeet/sPlayerFeet.yy",},},
     {"id":{"name":"sWall","path":"sprites/sWall/sWall.yy",},},
   ],
   "resourceType":"GMProject",

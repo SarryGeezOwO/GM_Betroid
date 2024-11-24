@@ -214,14 +214,30 @@ draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, image_
 
 
 DebugMode(false)
-// Draw foot
-draw_circle(leftFoot.posX, leftFoot.posY, leftFoot.weight, false)
-draw_circle(rightFoot.posX, rightFoot.posY, rightFoot.weight, false)
 
-DebugMode(false)
-// Draw legs
-draw_line_width(x-2, y-5, leftFoot.posX, leftFoot.posY, 4)
-draw_line_width(x+2, y-5, rightFoot.posX, rightFoot.posY, 4)
+// Draw foot
+//draw_circle(leftFoot.posX, leftFoot.posY, leftFoot.weight, false)
+//draw_circle(rightFoot.posX, rightFoot.posY, rightFoot.weight, false)
+var footSize = .35
+var rot = isWallClimb ? (isFacingRight ? 90 : -90) : 0
+
+draw_sprite_ext(
+	sPlayerFeet, 0, 
+	leftFoot.posX, leftFoot.posY,
+	footSize, footSize,
+	rot,
+	c_white,
+	1
+)
+
+draw_sprite_ext(
+	sPlayerFeet, 0, 
+	rightFoot.posX, rightFoot.posY,
+	footSize, footSize,
+	rot,
+	c_white,
+	1
+)
 
 
 
