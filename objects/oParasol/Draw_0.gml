@@ -95,7 +95,7 @@ for (var i = 0; i < 1; i += .25)
 		p1[0]+(time-i)*(p2[0]-p1[0]),
 		p1[1]+(time-i)*(p2[1]-p1[1])
 	]
-	draw_circle(ed[0], ed[1], 2, false)	
+	draw_circle(ed[0], ed[1], 1.5, false)	
 	draw_line(ed[0], ed[1], mp[0], mp[1])
 }
 

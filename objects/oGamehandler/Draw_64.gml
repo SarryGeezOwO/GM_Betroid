@@ -23,7 +23,7 @@ displayInfo("GamePaused " + boolToString(isGamePaused), 1)
 displayInfo("DebugMode: " + boolToString(oPlayer.debugToggle), 2)
 
 
-draw_set_alpha(.125)
+draw_set_alpha(0)
 draw_set_color(c_white)
 // Grid settings
 var grid_size = 32;  // The size of each grid square (adjust to your needs)

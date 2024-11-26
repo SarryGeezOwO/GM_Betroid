@@ -18,7 +18,7 @@ var rstepRestOffset = 6;
 
 if isRunning
 {
-	rstepRestOffset = 12
+	rstepRestOffset = 13
 	rightFoot.distance = 19
 	rStepOffset += 9
 }
@@ -29,7 +29,7 @@ else
 }
 
 var newLeftPosX = x+ ((isFacingRight) ? lStepOffset : -lStepOffset)
-var newRightPosX = x+ ((isFacingRight) ? rStepOffset : -(rStepOffset))
+var newRightPosX = x+ ((isFacingRight) ? rStepOffset+1 : -rStepOffset)
 if current_time - footTime > 60 
 {
 	// reset	

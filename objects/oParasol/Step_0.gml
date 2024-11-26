@@ -1,11 +1,11 @@
-x = oPlayer.x-(oPlayer.isFacingRight ? -13 : 13);
-y = oPlayer.y-(oPlayer.sprite_height/2) - (len-2)
+x = oPlayer.x-(oPlayer.isFacingRight ? 5 : -5);
+y = oPlayer.y-(oPlayer.sprite_height/2) - (len*2)
 
 time += 0.025;
 if (time > 1) time = 1-.25;
 
-var fv = (oPlayer.isFacingRight ? .20 : -.20)
-var mx = fv;
+//var fv = (oPlayer.isFacingRight ? -.20 : .20)
+var mx = 0;
 var my = -1;
 var l = sqrt(power(mx, 2) + power(my, 2))
 if l != 0 {
@@ -45,7 +45,7 @@ else
 	perpEndPoint[1] = lerp(perpEndPoint[1], endPoint[1], .5)
 	oPlayer.ySpeed = clamp(oPlayer.ySpeed, -100, oPlayer.glideFallSpeed)
 	
-	var rot = (oPlayer.isFacingRight ? 15 : -15)
+	var rot = (oPlayer.isFacingRight ? -10 : 10)
 	oPlayer.Grot = rot
 }
 

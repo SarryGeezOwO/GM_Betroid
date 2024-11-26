@@ -76,7 +76,7 @@ var centerY = y-(sprite_height/2)
 
 
 // Is moving animation
-var arcHeight = 8;
+var arcHeight = (isRunning ? 10 : 8);
 var offset = sin(t * pi) * arcHeight;
 if xInput == 0 || isJumping || !oParasol.isClosed
 {
