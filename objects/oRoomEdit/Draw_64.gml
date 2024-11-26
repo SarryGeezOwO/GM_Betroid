@@ -24,6 +24,7 @@ if selectedObject != noone
 	displayInfo("y: " +			string(selectedObject.y), 2)
 	displayInfo("scale x: " +	string(selectedObject.image_xscale), 3)
 	displayInfo("scale y: " +	string(selectedObject.image_yscale), 4)
+	displayInfo("rotation: " +	string(selectedObject.image_angle), 5)
 }
 else
 {
@@ -32,9 +33,11 @@ else
 	displayInfo("y: -", 2)
 	displayInfo("scale x: -" , 3)
 	displayInfo("scale y: -" , 4)
+	displayInfo("rotation: -", 5)
 }
+displayInfo("Object: " + (currentObject == noone ? "None" : object_get_name(currentObject)), 7)
 
 displayInfo("File: " + file_name_to_write, 0, true)
-displayInfo("Zoom: " + string(round(zoomLevel*100)), 1, true)
+displayInfo("Zoom: " + string(round(zoomLevel*100))+"%", 1, true)
 displayInfo("Mouse X: " + string(mouse_x), 2, true)
 displayInfo("Mouse Y: " + string(mouse_y), 3, true)

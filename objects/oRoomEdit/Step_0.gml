@@ -1,21 +1,25 @@
 var saveKey = keyboard_check_pressed( ord("S") )
-var scaleXKey = keyboard_check_pressed( ord("K") )
-var scaleYKey = keyboard_check_pressed( ord("L") )
-var modifierKey = keyboard_check( vk_lcontrol )
-var modifierAltKey = keyboard_check( vk_lalt )
 var deleteKey = keyboard_check_pressed( vk_delete )
+modifierCtrlKey = keyboard_check( vk_lcontrol )
+modifierAltKey = keyboard_check( vk_lalt )
+modifierShiftkey = keyboard_check( vk_lshift )
+
+var lKey = keyboard_check_pressed( vk_left )
+var rKey = keyboard_check_pressed( vk_right )
+var uKey = keyboard_check_pressed( vk_up )
+var dKey = keyboard_check_pressed( vk_down )
 
 mX = floor(mouse_x/pixelSnap) * pixelSnap
 mY = floor(mouse_y/pixelSnap) * pixelSnap
 
-if saveKey && modifierKey
+if saveKey && modifierCtrlKey
 {
 	// save all instance to a text file
 	save_current_room_data(file_name_to_write)
 }
 
 
-if mouse_check_button_pressed(mb_left)
+if mouse_check_button_pressed(mb_left) && !modifierCtrlKey && !modifierAltKey && !modifierShiftkey
 {	
 	// check first if mouse collides with any object
 	if position_meeting(mouse_x, mouse_y, all)
@@ -27,10 +31,13 @@ if mouse_check_button_pressed(mb_left)
 	else { set_selected_object(noone) }	
 }
 
-if mouse_check_button_pressed(mb_right)
+if mouse_check_button_pressed(mb_right) && !modifierCtrlKey && !modifierAltKey && !modifierShiftkey
 {
-	var instance = instance_create_layer(mX, mY, layer, oWall)
-	set_selected_object(instance)
+	if currentObject != noone {
+		var instance = instance_create_layer(mX, mY, layer, currentObject)
+		set_selected_object(instance)	
+	}
+	else { set_selected_object(noone) }	
 }
 
 if selectedObject != noone
@@ -44,15 +51,38 @@ if selectedObject != noone
 
 if modifierAltKey
 {
-	// increase scale
-	if selectedObject != noone
+	// Increase Scale
+	if selectedObject != noone && !modifierCtrlKey && !modifierShiftkey
 	{
-		if scaleXKey { selectedObject.image_xscale-- }
-		if scaleYKey { selectedObject.image_yscale-- }
+		if uKey { 
+			selectedObject.image_yscale++ 
+			selectedObject.y -= pixelSnap
+		}
+		if dKey { selectedObject.image_yscale++ }
+		if lKey { 
+			selectedObject.image_xscale++ 
+			selectedObject.x -= pixelSnap
+		}
+		if rKey { selectedObject.image_xscale++ }
+	}
+	
+	// Inverse Scale
+	if selectedObject != noone && modifierShiftkey && !modifierCtrlKey
+	{
+		if uKey { 
+			selectedObject.image_yscale--
+			selectedObject.y += pixelSnap
+		}
+		if dKey { selectedObject.image_yscale-- }
+		if lKey { 
+			selectedObject.image_xscale--
+			selectedObject.x += pixelSnap
+		}
+		if rKey { selectedObject.image_xscale-- }	
 	}
 
-	// ctrl + alt
-	if modifierKey
+	// ctrl + alt (move object position)
+	if modifierCtrlKey && !modifierShiftkey
 	{
 		if selectedObject != noone
 		{
@@ -61,12 +91,39 @@ if modifierAltKey
 		}
 	}
 }
-else
+
+if modifierShiftkey
 {
-	// Decreasee scale
-	if selectedObject != noone
+	// Rotate
+	if modifierCtrlKey && selectedObject != noone
 	{
-		if scaleXKey { selectedObject.image_xscale++ }
-		if scaleYKey { selectedObject.image_yscale++ }
+		if mouse_check_button(mb_left)
+		{
+			var _x = selectedObject.x;
+			var _y = selectedObject.y;
+			var angle = get_vector_normalized(_x, _y, mouse_x, mouse_y)
+			selectedObject.image_angle = unit_vector_to_degree(angle[0], angle[1])		
+		}
+		if uKey { selectedObject.image_angle += 20 }
+		if dKey	{ selectedObject.image_angle -= 20 }
+	}
+	
+	// Object picker
+	var move = (rKey - lKey) * (!modifierAltKey * !modifierCtrlKey);
+	var len = array_length(placableObjects)
+	currentObjectIndex += move
+	
+	if currentObjectIndex < 0		{ currentObjectIndex = len - 1 }
+	if currentObjectIndex >= len	{ currentObjectIndex = 0 }
+	
+	var str = placableObjects[currentObjectIndex];
+	if str != "None" {
+		currentObjectSprite = asset_get_index("s"+str)
+		currentObject = asset_get_index("o"+str)	
+	}
+	else
+	{
+		currentObjectSprite = noone
+		currentObject = noone
 	}
 }

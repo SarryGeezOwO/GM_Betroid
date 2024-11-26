@@ -1,0 +1,20 @@
+Alt + arrow				>> Scale object
+alt + shift + arrow		>> Inverse Scale object
+alt + ctrl				>> Move object to mouse position
+arrow					>> Move camera
+o						>> Zoom in
+p						>> Zoom out
+ctrl + s				>> save room
+ctrl + shift + m1		>> Rotate object
+ctrl + shift + up		>> Add 20 degrees to object
+ctrl + shift + down		>> add -20 degrees to object
+shift + left			>> Decrement object index
+shift + right			>> Increment object index
+
+
+
+
+------------- Mouse info ---------------
+m1	= hold mouse 1
+m1P = pressed mouse 1
+m1H = released mouse 1

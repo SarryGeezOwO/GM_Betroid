@@ -26,12 +26,15 @@ draw_set_color(c_white)
 
 
 // Draw current selected object (Ghost)
-draw_sprite_ext(
-	sWall, 0,
-	mX, mY,
-	1, 1,
-	0, c_white, .35
-)
+if currentObjectSprite != noone
+{
+	draw_sprite_ext(
+		currentObjectSprite, -1,
+		mX, mY,
+		1, 1,
+		0, c_white, .35
+	)	
+}
 
 // Draw mouse cell
 draw_rectangle(mX, mY, mX+pixelSnap, mY+pixelSnap, true)
@@ -41,14 +44,16 @@ draw_rectangle(mX, mY, mX+pixelSnap, mY+pixelSnap, true)
 if selectedObject != noone
 {
 	draw_set_color(c_aqua)
-	var sX = selectedObject.x;
-	var sY = selectedObject.y;
-	var sW = selectedObject.image_xscale * pixelSnap;
-	var sH = selectedObject.image_yscale * pixelSnap;
-	draw_line_width(sX, sY, sX+sW, sY, 2) // top
-	draw_line_width(sX, sY, sX, sY+sH, 2) // left
-	draw_line_width(sX, sY+sH, sX+sW, sY+sH, 2) // bottom
-	draw_line_width(sX+sW, sY, sX+sW, sY+sH, 2) // right
-	//draw_rectangle(sX, sY, sX+sW, sY+sH, true)	
+	var sX = selectedObject.bbox_left;
+	var sY = selectedObject.bbox_top;
+	var sW = selectedObject.bbox_right;
+	var sH = selectedObject.bbox_bottom;
+	draw_line_width(sX, sY, sW, sY, 2) // top
+	draw_line_width(sX, sY, sX, sH, 2) // left
+	draw_line_width(sX, sH, sW, sH, 2) // bottom
+	draw_line_width(sW, sY, sW, sH, 2) // right	
 	draw_set_color(c_white)
+	
+	// Draw origin point
+	draw_circle(sX, sY, 3, false)
 }

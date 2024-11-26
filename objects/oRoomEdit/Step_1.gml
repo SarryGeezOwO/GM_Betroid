@@ -4,9 +4,9 @@ var rKey = keyboard_check( vk_right )
 var uKey = keyboard_check( vk_up )
 var dKey = keyboard_check( vk_down )
 
-x += (rKey - lKey) * moveSpd
-y += (dKey - uKey) * moveSpd
-camera_set_view_pos(view_camera[0], x, y)
+camX += (rKey - lKey) * moveSpd * (!modifierCtrlKey * !modifierAltKey * !modifierShiftkey)
+camY += (dKey - uKey) * moveSpd * (!modifierCtrlKey * !modifierAltKey * !modifierShiftkey)
+camera_set_view_pos(view_camera[0], camX, camY)
 
 
 // zooming

@@ -40,6 +40,7 @@
   "name":"PrototypeBetroid",
   "resources":[
     {"id":{"name":"Lore and things","path":"notes/Lore and things/Lore and things.yy",},},
+    {"id":{"name":"Room editor shortcut keys","path":"notes/Room editor shortcut keys/Room editor shortcut keys.yy",},},
     {"id":{"name":"oBullet","path":"objects/oBullet/oBullet.yy",},},
     {"id":{"name":"oCamera","path":"objects/oCamera/oCamera.yy",},},
     {"id":{"name":"oDummy","path":"objects/oDummy/oDummy.yy",},},
