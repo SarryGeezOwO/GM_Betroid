@@ -1,4 +1,5 @@
-Resume() // errmm, play by default?
+debugMode = false
+Resume() // errmm, play by default
 
 gpu_set_texfilter(false)
 gpu_set_tex_filter(false)

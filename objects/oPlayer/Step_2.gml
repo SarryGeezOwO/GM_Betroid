@@ -40,13 +40,13 @@ if current_time - footTime > 60
 	footTime = current_time
 }
 
-if GetLen(x,leftLerpX,y,leftFoot.posY) > leftFoot.distance
+if point_distance(x,y, leftLerpX, leftFoot.posY) > leftFoot.distance
 {
 	leftLerpX = newLeftPosX;
 	footTime = current_time
 }
 
-if GetLen(x,rightLerpX,y,rightFoot.posY) > rightFoot.distance
+if point_distance(x,y, rightLerpX, rightFoot.posY) > rightFoot.distance
 {
 	rightLerpX = newRightPosX;
 	footTime = current_time
@@ -57,11 +57,11 @@ var lY = leftFoot.posY
 var rX = rightFoot.posX
 var rY = rightFoot.posY
 
-if GetLen(lX,leftLerpX,lY,lY) <= .25
+if point_distance(lX,lY,leftLerpX,lY) <= .25
 {
 	turn = 0
 }
-else if GetLen(rX,rightLerpX,rY,rY) <= .25
+else if point_distance(rX,rY, rightLerpX,rY) <= .25
 {
 	turn = 1
 }
@@ -123,10 +123,10 @@ if isWallClimb
 // Procedural Tail -----------------
 var _subPixel = .25
 var bTop = bodies[bodyCount-1]
-var offsetY = (isWallClimb ? 13 : 6)
+var offsetY = (isWallClimb ? 13 : 7)
 offsetY = (isRunning ? 3 : offsetY)
 
-var offsetX = (isFacingRight) ? -4 : 4;
+var offsetX = (isFacingRight) ? -3 : 3;
 offsetX = (isJumping || isWallClimb) ? 0 : offsetX
 offsetX = (isRunning) ? ((isFacingRight) ? -10 : 10) : offsetX
 
@@ -157,7 +157,7 @@ for (var i = bodyCount-2; i >= 0; i--)
 		}	
 	}
 	
-	var len = GetLen(b.posX, prev.posX, b.posY, prev.posY)
+	var len = point_distance(b.posX, b.posY, prev.posX, prev.posY)
 	if len <= b.distance {
 		continue	
 	}

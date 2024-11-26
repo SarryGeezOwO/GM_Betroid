@@ -1,11 +1,6 @@
-function DebugMode (flag)
-{
-	draw_set_color(flag ? c_red : c_white)
-}
-
 // Draw aim assist for debugging
 function debugAimAssist() {
-	DebugMode(true)
+	draw_set_color(c_red)
 	draw_set_alpha(.1)
 	for (var i = -assistDegree; i <= assistDegree; i++)
 	{	
@@ -32,22 +27,21 @@ function debugAimAssist() {
 			maxDistance, [oDummy, oWall], 3, true, true, c_lime
 		)
 	}	
-
-	DebugMode(false)
+	draw_set_color(c_white)
 }
 
 
 function debugPlayerMove(ofst)
 {
 	len = array_length(movePoints);
-	array_push(movePoints, new Vector(x, (y-(sprite_height/2))+ofst))
+	array_push(movePoints, [x, (y-(sprite_height/2))+ofst])
 	draw_set_color(c_ltgray)
 	
 	for (var i = 1; i < len; i++)
 	{
 		vec = movePoints[i]
 		vecPrev = movePoints[i-1]
-		draw_line(vecPrev.pX, vecPrev.pY, vec.pX, vec.pY)
+		draw_line(vecPrev[0], vecPrev[1], vec[0], vec[1])
 	}
 	
 	if len >= 100
@@ -62,7 +56,7 @@ function debugPlayerMove(ofst)
 
 if !isRecording
 {
-	if debugToggle 
+	if isDebugMode()
 	{
 		debugAimAssist()	
 	}
@@ -78,7 +72,7 @@ var centerY = y-(sprite_height/2)
 // Is moving animation
 var arcHeight = (isRunning ? 10 : 8);
 var offset = sin(t * pi) * arcHeight;
-if xInput == 0 || isJumping || !oParasol.isClosed
+if xInput == 0 || isJumping || !oParasol.isClosed || isWallClimb
 {
 	offset = 0
 }
@@ -86,6 +80,9 @@ else {
 	offset -= arcHeight/2
 }
 spriteYOffset = lerp(spriteYOffset, -offset, .2)
+
+var additionalRot = (isFacingRight? offset : -offset) * isGrounded;
+Grot += isRunning ? additionalRot : additionalRot*0.25
 var xScale = (isFacingRight ? 1 : -1)
 
 
@@ -208,12 +205,12 @@ if dX != 0 || dY != 0
 
 
 // Draw the actual player
-if debugToggle debugPlayerMove(spriteYOffset)
+if isDebugMode() debugPlayerMove(spriteYOffset)
 draw_sprite_ext(sprite_index, image_index, x, y+spriteYOffset, xScale, 1, image_angle+Grot, c_white, image_alpha) 
 
 
 
-DebugMode(false)
+draw_set_color(c_white)
 
 // Draw foot
 //draw_circle(leftFoot.posX, leftFoot.posY, leftFoot.weight, false)

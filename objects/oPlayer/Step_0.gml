@@ -15,14 +15,6 @@ var uaKey = keyboard_check(vk_up)
 var daKey = keyboard_check(vk_down)
 
 
-
-var debugKey = keyboard_check_pressed( ord("T") )
-if debugKey
-{
-	debugToggle = !debugToggle	
-}
-
-
 if xInput != 0 {
 	t += 0.1;
 }
@@ -32,7 +24,6 @@ if (t > 1) t = 0;
 var dTime = delta_time / 1000;
 cayoteTimer -= dTime;
 bufferTimer -= dTime;
-jumpTimer -= dTime;
 fireTimer -= dTime;
 wallJumpTimer -= dTime;
 
@@ -43,7 +34,7 @@ isGrounded = place_meeting(x, y+1, oWall)
 
 
 // Move inputs
-xInput = isLeaping ? xInput : (rkey - lKey);
+xInput = (rkey - lKey);
 if canMove
 {	
 	// Old
@@ -119,7 +110,7 @@ else
 
 
 // Vertical movement ---- jumping
-ySpeed += (grav + additionalGrav);	
+ySpeed += (grav + additionalGrav);
 
 // Jump buffering
 if spaceKey && canJump
@@ -127,7 +118,7 @@ if spaceKey && canJump
 	bufferTimer = bufferTime	
 }
 
-if relSpaceKey || jumpTimer <= 0
+if relSpaceKey || jumpTimer > jumpTime
 {
 	isJumping = false	
 }
@@ -144,7 +135,7 @@ if isGrounded
 	isLeaping = false
 	cayoteTimer = cayoteTime
 	isJumping = false
-	jumpTimer = jumpTime
+	jumpTimer = 0
 	isFalling = false
 	oParasol.isClosed = true
 }
@@ -153,7 +144,8 @@ if isGrounded
 if (cayoteTimer > 0) && (bufferTimer > 0)
 {
 	if isRunning {
-		isLeaping = true	
+		isLeaping = true
+		jumpTimer = jumpTime
 	}
 	ySpeed = -(jumpForceTap + additionalJumpHeight)
 	isJumping = true;
@@ -161,9 +153,11 @@ if (cayoteTimer > 0) && (bufferTimer > 0)
 	bufferTimer = 0
 }
 
-if isJumping && jumpTimer > 0 && spaceKeyH && !isRunning
+if isJumping && jumpTimer <= jumpTime && spaceKeyH && !isLeaping
 {
-	ySpeed += -jumpForce
+	var nT = normalize_float(jumpTimer, 0, jumpTime)+.2
+	ySpeed = lerp(ySpeed, -maxJumpHeight, nT)
+	jumpTimer += dTime;
 }
 
 
@@ -174,14 +168,14 @@ if isJumping && jumpTimer > 0 && spaceKeyH && !isRunning
 var centerY = y-sprite_height/2;
 var xOffset = sprite_width/2;
 leftWallCheck = (
-	position_meeting((x-xOffset)-3, centerY-6, oWall)	|| 
+	position_meeting((x-xOffset)-3, centerY-7, oWall)	|| 
 	position_meeting((x-xOffset)-3, centerY,   oWall)	||
-	position_meeting((x-xOffset)-3, centerY+6, oWall)
+	position_meeting((x-xOffset)-3, centerY+7, oWall)
 )
 rightWallCheck = (
-	position_meeting((x+xOffset)+3, centerY-6, oWall) ||
+	position_meeting((x+xOffset)+3, centerY-7, oWall) ||
 	position_meeting((x+xOffset)+3, centerY,   oWall) ||
-	position_meeting((x+xOffset)+3, centerY+6, oWall)
+	position_meeting((x+xOffset)+3, centerY+7, oWall)
 )
 
 wallJumpDir[0] = leftWallCheck - rightWallCheck // in this case it's inverted
@@ -422,7 +416,6 @@ if isShooting && fireTimer <= 0 && canShoot
 
 
 // Parasol
-debugTxt = "isFalling: " + string(isFalling)
 if canGlide
 {
 	oParasol.isClosed = !(parasolKey * isFalling)

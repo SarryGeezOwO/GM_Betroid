@@ -13,7 +13,7 @@ accelerationLeft = .65;	// speed turn (Left)
 accelerationRight = .65;	// speed turn (Right)
 xSpeed = 0;
 ySpeed = 0;
-grav = .4;
+grav = .5;
 additionalGrav = 0
 additionalMoveSpeed = 0
 isFacingRight = true;
@@ -32,16 +32,16 @@ isLeaping = false
 canJump = true
 additionalJumpHeight = 0
 jumpForceTap = 3.6
-jumpForce = .485
+maxJumpHeight = 5.5
 cayoteTime = 120
-bufferTime = 140
+bufferTime = 100
 cayoteTimer = 0
 bufferTimer = 0
 isJumping = false
 isGrounded = false
 isFalling = false
 jumpTimer = 0
-jumpTime = 225
+jumpTime = 220
 airTurnSpeed = 1;
 
 
@@ -61,6 +61,9 @@ wallJumpDir = [0, 0] // x, y
 // inverted direction of where the wall checked
 // leftWall = 1
 // rightWall = -1
+
+
+// Double jumping
 
 
 
@@ -115,7 +118,6 @@ bulletSpeed = 20
 // recording effect
 outline_offset_tail = 2; // additive
 outline_offset = 1.2; // Controls the outline size
-// Recording effect
 trail_part_sys = part_system_create();
 part_trail = part_type_create();
 part_type_shape(part_trail, pt_shape_cloud); // Shape of the particle
@@ -124,24 +126,13 @@ part_type_alpha3(part_trail, 1, 0.5, 0);    // Fading effect
 part_type_life(part_trail, 0, 30);         // Lifespan in frames
 
 
-// Wall effect
-wall_part_sys = part_system_create();
-part_wall_trail = part_type_create();
-part_type_shape(part_wall_trail, pt_shape_flare); // Shape of the particle
-part_type_size(part_wall_trail, 0.05, .2, -.035, .2);   // Size variation
-part_type_alpha3(part_wall_trail, 1, 0.5, 0);    // Fading effect
-part_type_life(part_wall_trail, 10, 120);         // Lifespan in frames
-
-
-
 // Run effect
 run_part_sys = part_system_create();
 part_run_trail = part_type_create();
 part_type_shape(part_run_trail, pt_shape_cloud); // Shape of the particle
-part_type_size(part_run_trail, 0.075, .15, -.01, .1);   // Size variation
+part_type_size(part_run_trail, 0.075, .15, -.01, .125);   // Size variation
 part_type_alpha3(part_run_trail, 1, 0.5, 0);    // Fading effect
 part_type_life(part_run_trail, 5, 25);         // Lifespan in frames
-
 
 
 // Procedural animation
@@ -155,11 +146,6 @@ Body = function(w, d) constructor {
 	posY = 0;
 }
 
-Vector = function(_x, _y) constructor {
-	pX = _x;
-	pY = _y;
-}
-
 bodyCount = 7;
 bodies = [
 	new Body(3, 1), // End of tail
@@ -170,26 +156,6 @@ bodies = [
 	new Body(6, 4),
 	new Body(6, 2), // attached to player
 ]
-
-GetLen = function(x1, x2, y1, y2) 
-{
-	d1 = x2-x1;
-	d2 = y2-y1;
-	return sqrt(power(d1, 2) + power(d2, 2))
-}
-
-GetDir = function(x1, x2, y1, y2)
-{
-	d1 = x2 - x1;
-	d2 = y2 - y1;
-	l = sqrt(power(d1, 2) + power(d2, 2))
-	if l != 0 
-	{
-		d1 /= l
-		d2 /= l
-	}
-	return new Vector(d1, d2);
-}
 
 // inital positions
 for(var i = 0; i < bodyCount; i++) 
@@ -212,4 +178,3 @@ rightFoot = new Body(4, 10)
 
 // Debugging
 movePoints = []
-debugToggle = false

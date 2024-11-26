@@ -14,6 +14,7 @@ if isRecording && (rawDX != 0 || rawDY != 0)
 }
 
 
+/*
 // Effect sliding on wall
 var brn = irandom_range(150, 255);
 part_type_color1(part_wall_trail, make_color_rgb(brn, brn, brn))
@@ -32,6 +33,7 @@ else if (rightWallCheck) && !isGrounded
 		part_particles_create(wall_part_sys, px, y-3, part_wall_trail, 2) // bottom
 	}
 }
+*/
 
 
 

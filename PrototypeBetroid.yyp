@@ -37,6 +37,7 @@
   "resources":[
     {"id":{"name":"Lore and things","path":"notes/Lore and things/Lore and things.yy",},},
     {"id":{"name":"oBullet","path":"objects/oBullet/oBullet.yy",},},
+    {"id":{"name":"oCamera","path":"objects/oCamera/oCamera.yy",},},
     {"id":{"name":"oDummy","path":"objects/oDummy/oDummy.yy",},},
     {"id":{"name":"oGamehandler","path":"objects/oGamehandler/oGamehandler.yy",},},
     {"id":{"name":"oGrass","path":"objects/oGrass/oGrass.yy",},},
@@ -47,6 +48,7 @@
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"GameState","path":"scripts/GameState/GameState.yy",},},
     {"id":{"name":"SG","path":"scripts/SG/SG.yy",},},
+    {"id":{"name":"Vectors","path":"scripts/Vectors/Vectors.yy",},},
     {"id":{"name":"Note_shader","path":"shaders/Note_shader/Note_shader.yy",},},
     {"id":{"name":"snd_metal_pipe","path":"sounds/snd_metal_pipe/snd_metal_pipe.yy",},},
     {"id":{"name":"snd_parasol_open","path":"sounds/snd_parasol_open/snd_parasol_open.yy",},},

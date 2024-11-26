@@ -9,3 +9,13 @@ function Pause() {
 function Resume() {
 	isGamePaused = false;	
 }
+
+function setDebugMode(flag)
+{
+	oGamehandler.debugMode = flag	
+}
+
+function isDebugMode()
+{
+	return oGamehandler.debugMode	
+}
