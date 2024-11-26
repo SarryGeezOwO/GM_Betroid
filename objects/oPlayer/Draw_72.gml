@@ -41,6 +41,6 @@ else if (rightWallCheck) && !isGrounded
 part_type_direction(part_run_trail, 0, 90, 0, 2)
 if isRunning && isGrounded
 {
-	px = isFacingRight ? 5 : -5
+	var px = isFacingRight ? 5 : -5
 	part_particles_create(run_part_sys, x+px, y-3, part_run_trail, 5) // bottom		
 }

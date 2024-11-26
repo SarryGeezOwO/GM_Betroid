@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":3.792,
+  "duration":0.0,
   "name":"snd_metal_pipe",
   "parent":{
     "name":"Sounds",
