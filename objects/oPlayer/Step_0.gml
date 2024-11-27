@@ -29,7 +29,7 @@ wallJumpTimer -= dTime;
 
 
 // Checks
-isGrounded = place_meeting(x, y+1, oWall)
+isGrounded = place_meeting(x, y+1, collisionArray)
 
 
 
@@ -168,14 +168,14 @@ if isJumping && jumpTimer <= jumpTime && spaceKeyH && !isLeaping
 var centerY = y-sprite_height/2;
 var xOffset = sprite_width/2;
 leftWallCheck = (
-	position_meeting((x-xOffset)-3, centerY-7, oWall)	|| 
-	position_meeting((x-xOffset)-3, centerY,   oWall)	||
-	position_meeting((x-xOffset)-3, centerY+7, oWall)
+	position_meeting((x-xOffset)-3, centerY-7, collisionArray)	|| 
+	position_meeting((x-xOffset)-3, centerY,   collisionArray)	||
+	position_meeting((x-xOffset)-3, centerY+7, collisionArray)
 )
 rightWallCheck = (
-	position_meeting((x+xOffset)+3, centerY-7, oWall) ||
-	position_meeting((x+xOffset)+3, centerY,   oWall) ||
-	position_meeting((x+xOffset)+3, centerY+7, oWall)
+	position_meeting((x+xOffset)+3, centerY-7, collisionArray) ||
+	position_meeting((x+xOffset)+3, centerY,   collisionArray) ||
+	position_meeting((x+xOffset)+3, centerY+7, collisionArray)
 )
 
 wallJumpDir[0] = leftWallCheck - rightWallCheck // in this case it's inverted
@@ -217,10 +217,10 @@ ySpeed = clamp(ySpeed, -100, maxFallSpeed)
 // Collision checkin -------------------------------
 // Collision checking (Horizontal)
 var _subPixel = .1;
-if place_meeting(x + xSpeed, y, oWall) 
+if place_meeting(x + xSpeed, y, collisionArray) 
 {
 	var _pixelCheck = _subPixel * sign(xSpeed)
-	while !place_meeting(x+_pixelCheck, y, oWall)
+	while !place_meeting(x+_pixelCheck, y, collisionArray)
 	{
 		x += _pixelCheck;
 	}
@@ -228,10 +228,10 @@ if place_meeting(x + xSpeed, y, oWall)
 }
 
 // Vertical collision
-if place_meeting(x, y + ySpeed, oWall) 
+if place_meeting(x, y + ySpeed, collisionArray) 
 {
 	var _pixelCheck = _subPixel * sign(ySpeed);
-	while !place_meeting(x, y+_pixelCheck, oWall)
+	while !place_meeting(x, y+_pixelCheck, collisionArray)
 	{
 		y+=_pixelCheck;
 	}
@@ -314,8 +314,13 @@ dY = rawDY;
 
 var dp_threshold = cos(degtorad(assistDegree))
 var hit = false
-with oDummy
+with all
 {
+	if get_object_group(object_index) != ObjectGroup.ENEMY
+	{
+		continue
+	}
+	
 	if oPlayer.isRecording
 	{
 		continue	
@@ -345,14 +350,13 @@ with oDummy
 		var wallCheck = raycast(
 			oPlayer.x, oPlayer.y-(oPlayer.sprite_height/2),
 			unit_vector_to_degree(eX, eY),
-			oPlayer.maxDistance, [id, oWall]
+			oPlayer.maxDistance, oPlayer.aimCollisionArray
 		)
 		
 		if wallCheck[4]
 		{	
-			// the raycast will both check oDummy and oWall,
-			// check if the ray hits a wall first
-			if wallCheck[3].object_index == oWall
+			// Check if the raycast hit an "Enemy" if not, skip this iteration
+			if !asset_has_tags(wallCheck[3].object_index, "Enemy", asset_object)
 			{
 				continue
 			}

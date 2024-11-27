@@ -37,5 +37,10 @@
     "path":"sprites/sDummy/sDummy.yy",
   },
   "spriteMaskId":null,
+  "tags":[
+    "Placeable",
+    "Enemy",
+    "AimCollision",
+  ],
   "visible":true,
 }

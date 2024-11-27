@@ -34,5 +34,8 @@
     "path":"sprites/sPlayerStart/sPlayerStart.yy",
   },
   "spriteMaskId":null,
-  "visible":true,
+  "tags":[
+    "Placeable",
+  ],
+  "visible":false,
 }

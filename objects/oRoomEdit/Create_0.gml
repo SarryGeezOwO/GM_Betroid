@@ -5,12 +5,12 @@ modifierCtrlKey = 0
 modifierAltKey = 0
 modifierShiftkey = 0
 
-currentObjectIndex = 1
+currentObjectIndex = 0
 currentObject = oWall
 currentObjectSprite = sWall
-placableObjects = [
-	"None", "Wall", "Dummy", "Grass", "PlayerStart"
-]
+
+placableObjects = tag_get_assets("Placeable")
+array_push(placableObjects, "-None")
 
 // Objects like, oGameHandler, oParasol, oNoteGraphics are placed automatically as they're invinsible anyways
 

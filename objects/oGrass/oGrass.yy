@@ -36,5 +36,8 @@
     "path":"sprites/sGrass/sGrass.yy",
   },
   "spriteMaskId":null,
+  "tags":[
+    "Placeable",
+  ],
   "visible":true,
 }

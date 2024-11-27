@@ -14,28 +14,6 @@ if isRecording && (rawDX != 0 || rawDY != 0)
 }
 
 
-/*
-// Effect sliding on wall
-var brn = irandom_range(150, 255);
-part_type_color1(part_wall_trail, make_color_rgb(brn, brn, brn))
-var px = (!isFacingRight ? bbox_left-2 : bbox_right+2)
-if (leftWallCheck) && !isGrounded
-{
-	if position_meeting(bbox_left-2, y, oWall)
-	{
-		part_particles_create(wall_part_sys, px, y-3, part_wall_trail, 2) // bottom
-	}
-}
-else if (rightWallCheck) && !isGrounded
-{
-	if position_meeting(bbox_right+2, y, oWall)
-	{
-		part_particles_create(wall_part_sys, px, y-3, part_wall_trail, 2) // bottom
-	}
-}
-*/
-
-
 
 // Dust effect on run
 part_type_direction(part_run_trail, 0, 90, 0, 2)

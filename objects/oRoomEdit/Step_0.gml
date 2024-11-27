@@ -116,7 +116,7 @@ if modifierShiftkey
 	if currentObjectIndex < 0		{ currentObjectIndex = len - 1 }
 	if currentObjectIndex >= len	{ currentObjectIndex = 0 }
 	
-	var str = placableObjects[currentObjectIndex];
+	var str = string_copy(placableObjects[currentObjectIndex], 2, string_length(placableObjects[currentObjectIndex])-1);
 	if str != "None" {
 		currentObjectSprite = asset_get_index("s"+str)
 		currentObject = asset_get_index("o"+str)	
@@ -126,4 +126,11 @@ if modifierShiftkey
 		currentObjectSprite = noone
 		currentObject = noone
 	}
+}
+
+
+// Turn on all Invinsible Object into a visible type
+with all 
+{
+	visible = true	
 }

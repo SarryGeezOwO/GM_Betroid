@@ -102,7 +102,7 @@ if !isGrounded
 	}
 	else 
 	{
-		moveFeet(x-(2*m), y-2, x+3*m, y-2)	
+		moveFeet(x-(2*m), y, x+3*m, y)	
 	}
 }
 
@@ -144,14 +144,14 @@ for (var i = bodyCount-2; i >= 0; i--)
 	
 	// Apply gravity
 	var realGrav = (xInput == 0 || !isGrounded) ? bodyGrav : .35;
-	if !place_meeting(b.posX, b.posY+b.weight+realGrav, oWall)
+	if !place_meeting(b.posX, b.posY+b.weight+realGrav, collisionArray)
 	{
 		b.posY += realGrav	
 	}
 	else 
 	{
 		var _pixelCheck = _subPixel * sign(b.posY+b.weight+realGrav)
-		while !place_meeting(b.posX, b.posY+b.weight+_pixelCheck, oWall)
+		while !place_meeting(b.posX, b.posY+b.weight+_pixelCheck, collisionArray)
 		{
 			b.posY += _pixelCheck;
 		}	

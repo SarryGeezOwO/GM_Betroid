@@ -24,7 +24,7 @@ function debugAimAssist() {
 		raycast(
 			newDX, newDY, 
 			unit_vector_to_degree(dX, dY),
-			maxDistance, [oDummy, oWall], 3, true, true, c_lime
+			maxDistance, aimCollisionArray, 3, true, true, c_lime
 		)
 	}	
 	draw_set_color(c_white)

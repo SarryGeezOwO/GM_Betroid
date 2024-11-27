@@ -2,6 +2,8 @@
 Grot = 0; // graphics rotation in degrees
 greenCol = make_color_rgb(141, 199, 63)
 SprCenter = 0
+collisionArray = tag_get_asset_ids("PlayerCollide", asset_object)
+aimCollisionArray = tag_get_asset_ids("AimCollision", asset_object)
 
 
 // Movement

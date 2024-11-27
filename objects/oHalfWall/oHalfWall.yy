@@ -1,9 +1,9 @@
 {
   "$GMObject":"",
-  "%Name":"oWall",
+  "%Name":"oHalfWall",
   "eventList":[],
   "managed":true,
-  "name":"oWall",
+  "name":"oHalfWall",
   "overriddenProperties":[],
   "parent":{
     "name":"Env",
@@ -28,8 +28,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sWall",
-    "path":"sprites/sWall/sWall.yy",
+    "name":"sHalfWall",
+    "path":"sprites/sHalfWall/sHalfWall.yy",
   },
   "spriteMaskId":null,
   "tags":[
