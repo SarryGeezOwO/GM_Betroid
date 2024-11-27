@@ -9,7 +9,7 @@ currentObjectIndex = 1
 currentObject = oWall
 currentObjectSprite = sWall
 placableObjects = [
-	"None", "Wall", "Dummy", "Grass"
+	"None", "Wall", "Dummy", "Grass", "PlayerStart"
 ]
 
 // Objects like, oGameHandler, oParasol, oNoteGraphics are placed automatically as they're invinsible anyways

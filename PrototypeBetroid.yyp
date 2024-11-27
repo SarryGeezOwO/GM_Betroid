@@ -49,10 +49,12 @@
     {"id":{"name":"oNoteGraphics","path":"objects/oNoteGraphics/oNoteGraphics.yy",},},
     {"id":{"name":"oParasol","path":"objects/oParasol/oParasol.yy",},},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},},
+    {"id":{"name":"oPlayerStart","path":"objects/oPlayerStart/oPlayerStart.yy",},},
     {"id":{"name":"oRoomEdit","path":"objects/oRoomEdit/oRoomEdit.yy",},},
     {"id":{"name":"oWall","path":"objects/oWall/oWall.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"RoomEditor","path":"rooms/RoomEditor/RoomEditor.yy",},},
+    {"id":{"name":"TemplateRoom","path":"rooms/TemplateRoom/TemplateRoom.yy",},},
     {"id":{"name":"GameState","path":"scripts/GameState/GameState.yy",},},
     {"id":{"name":"room_edit","path":"scripts/room_edit/room_edit.yy",},},
     {"id":{"name":"SG","path":"scripts/SG/SG.yy",},},
@@ -73,6 +75,7 @@
     {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},},
     {"id":{"name":"sPlayerDown","path":"sprites/sPlayerDown/sPlayerDown.yy",},},
     {"id":{"name":"sPlayerFeet","path":"sprites/sPlayerFeet/sPlayerFeet.yy",},},
+    {"id":{"name":"sPlayerStart","path":"sprites/sPlayerStart/sPlayerStart.yy",},},
     {"id":{"name":"sWall","path":"sprites/sWall/sWall.yy",},},
   ],
   "resourceType":"GMProject",
@@ -80,6 +83,7 @@
   "RoomOrderNodes":[
     {"roomId":{"name":"RoomEditor","path":"rooms/RoomEditor/RoomEditor.yy",},},
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"roomId":{"name":"TemplateRoom","path":"rooms/TemplateRoom/TemplateRoom.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

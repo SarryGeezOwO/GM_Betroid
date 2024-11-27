@@ -19,7 +19,7 @@ function boolToString(i)
 draw_set_color(c_white)
 if selectedObject != noone
 {
-	displayInfo("Selected: " +	string(selectedObject), 0)
+	displayInfo("Selected: " +	string(selectedObject.id), 0)
 	displayInfo("x: " +			string(selectedObject.x), 1)
 	displayInfo("y: " +			string(selectedObject.y), 2)
 	displayInfo("scale x: " +	string(selectedObject.image_xscale), 3)
