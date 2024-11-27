@@ -6,8 +6,8 @@
   "name":"oDummy",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"Enm",
+    "path":"folders/Objects/Enm.yy",
   },
   "parentObjectId":null,
   "persistent":false,

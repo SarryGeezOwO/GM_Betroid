@@ -10,8 +10,8 @@
   "name":"oGamehandler",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"Main",
+    "path":"folders/Objects/Main.yy",
   },
   "parentObjectId":null,
   "persistent":false,

@@ -10,8 +10,8 @@
   "name":"oGrass",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"Prp",
+    "path":"folders/Objects/Prp.yy",
   },
   "parentObjectId":null,
   "persistent":false,

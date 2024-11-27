@@ -18,3 +18,15 @@ shift + right			>> Increment object index
 m1	= hold mouse 1
 m1P = pressed mouse 1
 m1H = released mouse 1
+
+
+---------- Categories -------------
+// Instances layer will be based on category
+/* Layers get created as this same order
+
+    /Gme          <- GameObjects,           such as Room transitions, and player starter position
+    /Enm          <- Enemies
+    /Haz          <- Hazard object,         such as spikes
+    /Prp          <- Props,                 such as grass
+    /Env          <- Environment Object     such as Ground
+*/

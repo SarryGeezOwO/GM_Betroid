@@ -11,8 +11,8 @@
   "name":"oCamera",
   "overriddenProperties":[],
   "parent":{
-    "name":"Player related",
-    "path":"folders/Objects/Player related.yy",
+    "name":"Main",
+    "path":"folders/Objects/Main.yy",
   },
   "parentObjectId":null,
   "persistent":false,

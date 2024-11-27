@@ -8,8 +8,8 @@
   "name":"oPlayerStart",
   "overriddenProperties":[],
   "parent":{
-    "name":"Player related",
-    "path":"folders/Objects/Player related.yy",
+    "name":"Gme",
+    "path":"folders/Objects/Gme.yy",
   },
   "parentObjectId":null,
   "persistent":false,
