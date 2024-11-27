@@ -216,7 +216,7 @@ ySpeed = clamp(ySpeed, -100, maxFallSpeed)
 
 // Collision checkin -------------------------------
 // Collision checking (Horizontal)
-var _subPixel = .1;
+var _subPixel = .05; // lower more precision, but more computation heavy
 if place_meeting(x + xSpeed, y, collisionArray) 
 {
 	var _pixelCheck = _subPixel * sign(xSpeed)

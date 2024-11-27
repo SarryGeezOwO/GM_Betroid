@@ -1,7 +1,7 @@
 {
   "$GMNotes":"",
-  "%Name":"Room editor shortcut keys",
-  "name":"Room editor shortcut keys",
+  "%Name":"nt_Lore and things",
+  "name":"nt_Lore and things",
   "parent":{
     "name":"Notes",
     "path":"folders/Notes.yy",

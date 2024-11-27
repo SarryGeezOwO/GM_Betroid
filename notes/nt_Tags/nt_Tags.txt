@@ -1,0 +1,11 @@
+> AimCollision [Object]
+	Objects that can block the aiming system of the player
+	
+> Enemy [Object]
+	Objects that are recognized as an enemy by the player
+	
+> Placeable [Object]
+	Objects that are available to the room editor
+	
+> PlayerCollide [Object]
+	Objects that the player can collide with

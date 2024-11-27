@@ -24,5 +24,7 @@ else { text = "None" }
 
 draw_text(20, 10, text)
 draw_text(20, 30, "isShooting: " + string(isShooting))
+draw_text(20, 50, "is: " + string(isShooting))
+draw_text(20, 70, "isShooting: " + string(isShooting))
 
 draw_text(160, 10, debugTxt)

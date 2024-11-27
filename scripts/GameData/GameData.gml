@@ -18,7 +18,7 @@ ds_map_add(global.group_names, ObjectGroup.HAZARD, "/Haz");
 
 global.object_groups = ds_map_create();
 ds_map_add(global.object_groups, oWall, ObjectGroup.ENVIRONMENT);
-ds_map_add(global.object_groups, oHalfWall, ObjectGroup.ENVIRONMENT);
+ds_map_add(global.object_groups, oHalfWallT, ObjectGroup.ENVIRONMENT);
 ds_map_add(global.object_groups, oDummy, ObjectGroup.ENEMY);
 ds_map_add(global.object_groups, oPlayerStart, ObjectGroup.GAMEOBJECT);
 ds_map_add(global.object_groups, oGrass, ObjectGroup.PROP);
